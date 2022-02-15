@@ -5,7 +5,7 @@
 Web app quiz game like **Kahoot!** to use in a classroom
 
 
-## 2 - Installation
+## 2 - Installation
 Install all dependencies with **npm**
 ```
 npm ci
