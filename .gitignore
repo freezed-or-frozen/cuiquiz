@@ -1,3 +1,5 @@
-# libraries
+# Files and folders to ignore
+data/cuiquiz.sqlite
+data/*.json
 node_modules/
 package-lock.json
