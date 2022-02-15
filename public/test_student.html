@@ -1,0 +1,112 @@
+<!-- Extend from base template -->
+{% extends "base.html" %}
+
+<!-- Javascript specific code -->
+{% block javascript %}
+<script src="{{ url_for('static', filename='js/test_student.js') }}" type="text/javascript" charset="utf-8"></script>
+{% endblock %}
+
+
+<!-- HTML specific code -->
+{% block content %}
+    <!-- Screen #0 : choosing the quiz to play -->
+    <div id="choosing">
+      <h2>Quiz to play</h2>
+      <div id="quizToPlay">
+        <p>No quiz to play for the moment...</p>
+      </div>      
+    </div>
+
+    <!-- Screen #1 : naming the player -->
+    <div id="naming">
+      <h2>Players</h2>
+      <div class="form-group">
+        <label>Your name :</label>
+        <input id="playerNameInput" type="text" class="form-control" />
+      </div>        
+      <button id="playerNameButton" class="btn btn-primary">Let's go</button>
+    </div>
+
+    <!-- Screen #2 : playing -->
+    <div id="gaming">
+      <h2>Quiz</h2>
+      <div id="question">
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              <button id="redButton" type="button" class="btn btn-block btn-danger">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-triangle-fill" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M7.022 1.566a1.13 1.13 0 0 1 1.96 0l6.857 11.667c.457.778-.092 1.767-.98 1.767H1.144c-.889 0-1.437-.99-.98-1.767L7.022 1.566z"/>
+                </svg>                  
+              </button>
+            </div>
+            <div class="col">
+              <button id="blueButton" type="button" class="btn btn-block btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-diamond-fill" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M6.95.435c.58-.58 1.52-.58 2.1 0l6.515 6.516c.58.58.58 1.519 0 2.098L9.05 15.565c-.58.58-1.519.58-2.098 0L.435 9.05a1.482 1.482 0 0 1 0-2.098L6.95.435z"/>
+                </svg>     
+              </button>
+            </div>
+          </div>
+          <div class="w-100"></div>
+          <br />
+          <div class="row">
+            <div class="col">
+              <button id="yellowButton" type="button" class="btn btn-block btn-warning">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-circle-fill" viewBox="0 0 16 16">
+                  <circle cx="8" cy="8" r="8"/>
+                </svg>
+              </button>
+            </div>
+            <div class="col">
+              <button id="greenButton" type="button" class="btn btn-block btn-success">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-square-fill" viewBox="0 0 16 16">
+                  <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2z"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <input id="quizId" type="hidden" value="" />
+      <input id="questionId" type="hidden" value="" />
+      <input id="playerId" type="hidden" value="" />
+      <input id="playerName" type="hidden" value="" />      
+    </div>
+
+    <!-- Screen #3 : checking results for a question -->
+    <div id="checking">
+      <h2>Question results</h2>
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <div id="questionAnswer" class="card text-white bg-success mb-3" style="max-width: 18rem;">
+              <div class="card-header"><span id="commentAnswer">...</span></div>
+              <div class="card-body">
+                <h5 class="card-title">Good answer : <span id="goodAnswer">...</span></h5>
+                <p class="card-text">                  
+                  Your answer : <span id="yourAnswer">...</span>
+                </p>
+              </div>
+            </div>              
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Screen #4 : ending with leaderboard -->
+    <div id="ending">
+    </div>
+
+    <div id="testing">
+      <h2>Testing</h2>
+      <button id="quizzes_participation_response" type="button" class="btn btn-secondary">quizzes_participation_response</button>
+      <button id="players_list_names" type="button" class="btn btn-secondary">players_list_names</button>
+      <button id="player_in_database" type="button" class="btn btn-secondary">player_in_database</button>
+      <button id="player_send_name_again" type="button" class="btn btn-secondary">player_send_name_again</button>
+      <button id="quiz_start" type="button" class="btn btn-secondary">quiz_start</button>
+      <button id="question_receive" type="button" class="btn btn-secondary">question_receive</button>
+      <button id="question_stats" type="button" class="btn btn-secondary">question_stats</button>
+    </div>
+    
+{% endblock %}

@@ -1,0 +1,153 @@
+<!-- Extend from base template -->
+{% extends "base.html" %}
+
+<!-- Javascript specific code -->
+{% block javascript %}
+<script src="{{ url_for('static', filename='js/test_teacher.js') }}" type="text/javascript" charset="utf-8"></script>
+{% endblock %}
+
+
+<!-- HTML specific code -->
+{% block content %}
+    <!-- Screen #0 : choosing the quiz to play -->
+    <div id="choosing">
+      <h2>Quizzes list</h2>
+      <div id="quizzes">
+        <table class="table">
+          <thead class="thead-dark">
+            <tr>
+              <th>Id</th>
+              <th>Title</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="quizzesTable">
+          </tbody>          
+        </table>
+      </div>
+    </div>
+
+    <!-- Screen #1 : naming the player -->
+    <div id="naming">
+      <h2>Online players :</h2>
+      <div id="players"></div>
+
+      <br />
+      <h2>Quiz :</h2>
+      <button id="quizStart" class="btn btn-success">Start !</button>
+    </div>
+
+    <!-- Screen #2 : playing -->
+    <div id="gaming">
+      <div id="question">        
+        <div class="container">
+          <div class="row">
+            <div class="col-1 align-self-center">
+              <span class="badge badge-pill badge-dark">
+                <h2><span id="questionTime">59</span></h2>
+              </span>
+            </div>
+            <div class="col-10 align-self-start">
+              <!--<div class="jumbotron">-->
+                <div id="questionText">                  
+                </div>
+              <!--</div>-->
+            </div>
+            <div class="col-1 align-self-center">
+              0 answers
+            </div>
+            
+          </div>
+          <div class="row">
+            <div class="col">
+              <button id="redButton" type="button" class="btn btn-block btn-danger">
+                <span id="questionAnswer0"></span>
+              </button>
+            </div>
+            <div class="col">
+              <button id="blueButton" type="button" class="btn btn-block btn-primary">
+                <span id="questionAnswer1"></span>
+              </button>
+            </div>
+          </div>
+          <div class="w-100"></div>
+          <br />
+          <div class="row">
+            <div class="col">
+              <button id="yelloButton" type="button" class="btn btn-block btn-warning">
+                <span id="questionAnswer2"></span>
+              </button>
+            </div>
+            <div class="col">
+              <button id="greenButton" type="button" class="btn btn-block btn-success">
+                <span id="questionAnswer3"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button id="add_code" type="button" class="btn btn-secondary">add_code</button>
+    </div>
+
+    <!-- Screen #3 : ending with leaderboard -->
+    <div id="checking">
+      <h2>Question results</h2>
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body">
+                <canvas id="chartAnswers" height="400"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Screen #4 : ending with leaderboard -->
+    <div id="ending">
+      <h2>Quiz results</h2>
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <table class="table">
+              <thead class="thead-dark">
+                <tr>
+                  <th>Rank</th>
+                  <th>Player</th>
+                  <th>Score</th>
+                </tr>
+              </thead>
+              <tbody id="playersTable">
+                <tr id="removable">
+                  <th>1</th>
+                  <th>riri</th>
+                  <th>245</th>
+                </tr>
+                <tr id="removable">
+                  <tr>
+                  <th>2</th>
+                  <th>fifi</th>
+                  <th>103</th>
+                </tr>
+              </tbody>          
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="testing">
+      <h2>Testing</h2>
+      <button id="quizzes_list_request" type="button" class="btn btn-secondary">quizzes_list_request</button>
+      <button id="quizzes_selection_request" type="button" class="btn btn-secondary">quizzes_selection_request</button>
+      <button id="remove_player" type="button" class="btn btn-secondary">remove_player</button>
+      <button id="question_send_content" type="button" class="btn btn-secondary">question_send_content</button>
+      <button id="question_time_end" type="button" class="btn btn-secondary">question_time_end</button>
+      <button id="quiz_leaderboard_request" type="button" class="btn btn-secondary">quiz_leaderboard_request</button>
+      <button id="remove_rows" type="button" class="btn btn-secondary">remove_rows</button>
+      
+    </div>
+    
+{% endblock %}
