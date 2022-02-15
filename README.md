@@ -1,4 +1,4 @@
-# CuiQuiz
+# CuiQuiz
 
 
 ## 1 - Introduction
