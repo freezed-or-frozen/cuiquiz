@@ -13,15 +13,12 @@ $(document).ready(function(){
   // Page is loaded and ready
   console.log("=> page is ready...");  
 
-  // Choose the screen to print in the browser
-  $("#authenticating").css("display", "block");
-  $("#choosing").css("display", "none");
-  $("#naming").css("display", "none");
-  $("#gaming").css("display", "none");
-  $("#checking").css("display", "none");
-  $("#sorting").css("display", "none");
-  $("#thanking").css("display", "none");
-  $("#ending").css("display", "none");
+  // Change the screen to print in the browser
+  $("#authentication").css("display", "block");
+  $("#progressions").css("display", "none");
+  $("#quizzes").css("display", "none");
+  $("#sessions").css("display", "none");
+  $("#groups").css("display", "none");
   
   // Creation of socket.io object
   var socket = io();
@@ -46,50 +43,68 @@ $(document).ready(function(){
   /**
    * When teacher click to send its password
    */
-  $("#teacherPasswordButton").click(function(){
+  $("#administratorPasswordButton").click(function(){
     // Print details of clicked button
-    console.log("=> button::playerPasswordButton : ");
+    console.log("=> button::administratorPasswordButton : ");
 
     // Read player's name and send it to the server
-    let teacher_password = $("#teacherPasswordInput").val();
-    console.log("  + teacher_password : " + teacher_password); 
+    let administrator_password = $("#administratorPasswordInput").val();
+    console.log("  + administrator_password : " + administrator_password); 
     socket.emit(
-      "teacher_password_request",
-      {"teacher_password": teacher_password}
+      "administrator_password_request",
+      {"administrator_password": administrator_password}
     ); 
   });
 
   /**
    * When the password is validated by the server
    */
-  socket.on("teacher_password_response", function(data) {  
+  socket.on("administrator_password_response", function(data) {  
     // Print details of received data    
-    console.log("=> socket.io::teacher_password_response : " + JSON.stringify(data));
+    console.log("=> socket.io::administrator_password_request : " + JSON.stringify(data));
 
     if (data.session_token != "NOPE") {
       // Save the session token
       CurrentSession.session_token = data.session_token;
-          
-      // Change the screen to print in the browser
-      $("#authenticating").css("display", "none");
-      $("#choosing").css("display", "block");
-      $("#naming").css("display", "none");
-      $("#gaming").css("display", "none");
-      $("#checking").css("display", "none");
-      $("#sorting").css("display", "none");
-      $("#thanking").css("display", "none");
-      $("#ending").css("display", "none");
 
-      // Send server that a the teacher is authenticated and wants the list of quizzes
-      //socket.emit("quizzes_list_request", {"token": "..."});
-      socket.emit("progressions_list_request", {"token": "..."});
-    }    
+      let notification = "<div class=\"alert alert-success\" role=\"alert\">"
+      notification += "Authentication OK, welcome !</div>";
+      $("#notification").html(notification);
+      $("#authentication").css("display", "none");
+      $("#progressions").css("display", "none");
+      $("#quizzes").css("display", "none");
+      $("#sessions").css("display", "none");
+      $("#groups").css("display", "none");
+    }
   });
 
 
   //==========================================================================
-  // Step 1 : choosing the progression, the quiz
+  // Progressions
   //==========================================================================
+
+  /**
+   * When administrator clicks on progressions menu link
+   */
+  $("#progressionsButton").click(function(){
+    // Print details of clicked button
+    console.log("=> button::progressionsButton : ");
+
+    // Check authentication
+    if (CurrentSession.session_token) {
+
+      // Change the screen to print in the browser
+      $("#notification").html("<div class=\"alert alert-xxx\" role=\"alert\"></div>");
+      $("#authentication").css("display", "none");
+      $("#progressions").css("display", "block");
+      $("#quizzes").css("display", "none");
+      $("#sessions").css("display", "none");
+      $("#groups").css("display", "none");     
+
+      // Ask for progressions list
+      socket.emit("progressions_list_request", {"token": "..."});
+    }
+  });
 
   /**
    * When a the list of progression arrive, we build a table 
@@ -113,19 +128,31 @@ $(document).ready(function(){
     });
   });
 
+
+  //==========================================================================
+  // Quizzes
+  //==========================================================================
+
   /**
-   * When clicking to choose a progression
+   * When administrator clicks on quizzes menu link
    */
-  $(document).on("click", ".selectable" ,function (event) {      
-    // Print details of event
-    console.log("=> button::.selectable : " + this.id);        
+  $("#quizzesButton").click(function(){
+    // Print details of clicked button
+    console.log("=> button::quizzesButton : ");
 
-    // Save the quiz_id
-    CurrentSession.progression_id = this.id;
-
-    // Send selected quiz_id thru socket.io
-    //socket.emit("progressions_selection_request", {"progression_id": this.id});
-    socket.emit("quizzes_list_request", {"progression_id": this.id});
+    // Check authentication
+    if (CurrentSession.session_token) {
+      // Change the screen to print in the browser
+      $("#notification").html("<div class=\"alert alert-xxx\" role=\"alert\"></div>");
+      $("#authentication").css("display", "none");
+      $("#progressions").css("display", "none");
+      $("#quizzes").css("display", "block");
+      $("#sessions").css("display", "none");
+      $("#groups").css("display", "none");  
+      
+      // Ask for quizzes list
+      socket.emit("quizzes_list_request", {"progression_id": 0});
+    }
   });
 
   /**
@@ -141,393 +168,59 @@ $(document).ready(function(){
       html_table_line += "<td>" + value.quiz_id + "</td>";
       html_table_line += "<td>" + value.quiz_title + "</td>";
       html_table_line += "<td><button id=\"" + value.quiz_id + "\" type=\"button\" ";
-      html_table_line += "class=\"btn btn-primary playable\">";
-      html_table_line += "New session</button></td>";
+      html_table_line += "class=\"btn btn-danger deletable\">";
+      html_table_line += "Delete</button></td>";
       html_table_line += "</tr>";
       $("#quizzesTable").append(html_table_line);
     });
   });
 
+
+  //==========================================================================
+  // Sessions
+  //==========================================================================
+
   /**
-   * When clicking to start to play a quiz => new session should be created
+   * When administrator clicks on quizzes menu link
    */
-  $(document).on("click", ".playable" ,function (event) {      
-    // Print details of event
-    console.log("=> button::.playable : " + this.id);        
+  $("#sessionsButton").click(function(){
+    // Print details of clicked button
+    console.log("=> button::sessionButton : ");
 
-    // Save the quiz_id
-    CurrentSession.quiz_id = this.id;
-
-    // Send selected quiz_id thru socket.io
-    let request = {
-      "progression_id": CurrentSession.progression_id,
-      "quiz_id": CurrentSession.quiz_id
+    // Check authentication
+    if (CurrentSession.session_token) {
+      // Change the screen to print in the browser
+      $("#notification").html("<div class=\"alert alert-xxx\" role=\"alert\"></div>");
+      $("#authentication").css("display", "none");
+      $("#progressions").css("display", "none");
+      $("#quizzes").css("display", "none");
+      $("#sessions").css("display", "block");
+      $("#groups").css("display", "none");     
     }
-    socket.emit("quizzes_selection_request", request);
   });
 
-  /**
-   * When a new session is created, we change screen to wait for players to connect
-   */
-  socket.on("quizzes_selection_response", function(data) {  
-    // Print details of received data    
-    console.log("=> socket.io::quizzes_selection_response : " + JSON.stringify(data));
 
-    // Save the quiz_id
-    CurrentSession.session_id = data.session_id;
-    
-    // Print the quiz title
-    $("#quizTitle").html(data.quiz_title);
-
-    // Change the screen to print in the browser
-    $("#choosing").css("display", "none");
-    $("#naming").css("display", "block");
-    $("#gaming").css("display", "none");
-    $("#checking").css("display", "none");
-    $("#sorting").css("display", "none");
-    $("#thanking").css("display", "none");
-    $("#ending").css("display", "none");
-  });
-
-  
   //==========================================================================
-  // Step 2 : wait for players names
+  // Groups
   //==========================================================================
 
   /**
-   * When a new player send its name to play
+   * When administrator clicks on groups menu link
    */
-  socket.on("player_subscribe_response", function(data) { 
-    // Print details of received data     
-    console.log("=> socket.io::player_subscribe_response : " + JSON.stringify(data));
+  $("#groupsButton").click(function(){
+    // Print details of clicked button
+    console.log("=> button::groupsButton : ");
 
-    // If no error during player subscription
-    if (!data.error) {
-      // Add a button with player's name to kick him/her if needed
-      let html_button = "";
-      html_button += "<button id=\"" + data.player.player_name + "\" type=\"button\" ";
-      html_button += "class=\"btn btn-primary removable\">";
-      html_button += data.player.player_name + "</button>&nbsp;";
-      $("#players").append(html_button);
-
-      // Add the new player to global variables
-      CurrentSession.players.push(data);
-      console.log("CurrentSession : " + JSON.stringify(CurrentSession));
-
-      // Update players number
-      $("#playersNumber").html(CurrentSession.players.length);
-    }    
-  });
-
-  /**
-   * When clicking the button to kick a player
-   */
-  $(document).on("click", ".removable" ,function (event) {
-    // Print event details
-    console.log("=> button::.removable : " + this.id);
-
-    // Remove the button
-    this.remove();
-
-    // Remove the player from global variable array
-    const index = CurrentSession.players.indexOf(this.id);
-    if (index > -1) {
-      CurrentSession.players.splice(index, 1);
+    // Check authentication
+    if (CurrentSession.session_token) {
+      // Change the screen to print in the browser
+      $("#notification").html("<div class=\"alert alert-xxx\" role=\"alert\"></div>");
+      $("#authentication").css("display", "none");
+      $("#progressions").css("display", "none");
+      $("#quizzes").css("display", "none");
+      $("#sessions").css("display", "none");
+      $("#groups").css("display", "block");     
     }
-
-    // Send player_id to server 
-    socket.emit("player_remove_request", {"player_name": this.id});
   });
 
-  /**
-   * When clicking the button to start the quiz
-   */
-  $("#quizStart").click(function(){
-    console.log("=> button::#quizStart) : ");  
-
-    // Tell server that we need the next question of the quiz
-    socket.emit("question_details_request");    
-  });
-
-
-  //==========================================================================
-  // Step 3 : quiz and its questions
-  //==========================================================================
-  
-  /**
-   * Update the timer
-   */
-  function update_timer() {
-    CurrentSession.timer_value -= 1;    
-
-    if (CurrentSession.timer_value > 0) {
-      $("#questionTimer").html(CurrentSession.timer_value);
-      CurrentSession.timer_object = setTimeout(function() {
-        update_timer();
-      }, 1000);
-    } else {
-      if (CurrentSession.timer_state == true) {
-        // Tell server that the question is finished
-        socket.emit("question_time_end");  
-      }
-    }
-  }
-
-  /**
-   * When a new question arrived
-   */
-  socket.on("question_details_response", function(data) {
-    // Print details of received data    
-    console.log("=> socket.io::question_details_response : " + JSON.stringify(data));
-
-    // Initialize answers number to 0
-    CurrentSession.answers_number = 0;
-
-    // Choose the screen to print in the browser
-    $("#choosing").css("display", "none");
-    $("#naming").css("display", "none");
-    $("#gaming").css("display", "block");
-    $("#checking").css("display", "none");
-    $("#sorting").css("display", "none");
-    $("#thanking").css("display", "none");
-    $("#ending").css("display", "none");
-
-    // Print question content
-    $("#questionText").html(data.question.question_text);
-    $("#questionAnswer0").html(data.answers[0]);
-    $("#questionAnswer1").html(data.answers[1]);
-    $("#questionAnswer2").html(data.answers[2]);
-    $("#questionAnswer3").html(data.answers[3]);
-
-    // Start the timer
-    CurrentSession.timer_state = true;
-    CurrentSession.timer_value = data.question.question_time;
-    CurrentSession.timer_object = setTimeout(function() {
-      update_timer();
-    }, 1000);
-  });
-  
-  
-  /**
-   * When a player answered a question
-   */
-  socket.on("question_answer_response", function(data) {
-    // Print details of received data    
-    console.log("=> socket.io::question_answer_response : " + JSON.stringify(data));
-
-    // Increment, save and print the new value
-    CurrentSession.answers_number += 1;
-    $("#answersNumber").html(CurrentSession.answers_number);
-  });
-
-  /**
-   * When clicking to end the question before time is up
-   */
-  $("#endBeforeTimeUp").click(function(){
-    // Print button details
-    console.log("=> button::#endBeforeTimeUp) : ");  
-    CurrentSession.timer_state = false;
-
-    // Tell server that the question is finished
-    socket.emit("question_end_request");    
-  });
-
-  /**
-   * When questions stats results are received
-   */
-  socket.on("question_end_response", function(data) {
-    // Print details of received data   
-    console.log("=> socket.io::question_end_response : " + JSON.stringify(data));
-
-    // Choose the screen to print in the browser
-    $("#choosing").css("display", "none");
-    $("#naming").css("display", "none");
-    $("#gaming").css("display", "none");
-    $("#checking").css("display", "block");
-    $("#sorting").css("display", "none");
-    $("#thanking").css("display", "none");
-    $("#ending").css("display", "none");
-
-    // Prepare the data
-    let stats = [0, 0, 0, 0];
-    data.answers_by_players.forEach(answer => {
-      stats[answer.answer_position] += 1;
-    });
-    console.log("stats : " + JSON.stringify(stats));
-    
-    // Prepare the title of the chart
-    let chart_title = "GOOD ANSWER : " + data.good_answer.answer_text + " (" + data.good_answer.answer_position + ")";
-
-    // Create and print the chart
-    const ctx = $('#chartAnswers');
-    if (typeof CurrentSession.chart != "undefined") {
-      CurrentSession.chart.destroy();
-    }        
-    CurrentSession.chart = new Chart(ctx, {
-      type: "bar",
-      data: {
-        labels: ["Red", "Blue", "Yellow", "Green"],
-        datasets: [{
-          label: "",
-          data: stats,
-          /*data: [
-            data.answers_by_players.answer0.length,
-            data.answers_by_players.answer1.length,
-            data.answers_by_players.answer2.length,
-            data.answers_by_players.answer3.length
-          ],*/
-          backgroundColor: [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(255, 206, 86, 0.2)',
-            'rgba(75, 192, 192, 0.2)'
-          ],
-          borderColor: [
-            'rgba(255,99,132,1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)'
-          ],
-          borderWidth: 1
-        }]
-      },
-      options: {
-        // TODO : add students names in tooltips
-        maintainAspectRatio: false,
-        plugins: {
-          title: {
-            display: true,
-            text: chart_title
-          },
-          legend: {
-            display: false
-          }
-        },
-        scales: {
-          y: {
-            beginAtZero: true,
-            ticks: {
-              stepSize: 1
-            }
-          }
-        }
-      }
-    });
-  });
-
-  /**
-   * Tell the server that we need the next question
-   */  
-  $("#getLeaderboard").click(function(){
-    // Print button details
-    console.log("=> button::#getLeaderboard) : ");  
-
-    // Tell server that we need the leaderboard
-    socket.emit("quiz_leaderboard_request");    
-  });
-
-  /**
-   * Tell the server that we need the next question
-   */  
-  $("#nextQuestion").click(function(){
-    // Print button details
-    console.log("=> button::#nextQuestion) : ");  
-
-    // Tell server that we need the next question
-    socket.emit("question_details_request");    
-  });
-
-  /**
-   * When question leaderboard results are received
-   */
-  socket.on("quiz_leaderboard_response", function(data) {
-    // Print details of received data  
-    console.log("=> socket.io::quiz_leaderboard_response : " + JSON.stringify(data));
-
-    // Choose the screen to print in the browser
-    $("#choosing").css("display", "none");
-    $("#naming").css("display", "none");
-    $("#gaming").css("display", "none");
-    $("#checking").css("display", "none");
-    $("#sorting").css("display", "block");
-    $("#thanking").css("display", "none");
-    $("#ending").css("display", "none");
-
-    // Remove the lines of the last leaderboard
-    $("#playersTable").empty();
-
-    // Construct the leaderboard table line by line
-    let rank = 1;
-    $.each(data.leaderboard, function(key, value) {
-      let html_table_line = "<tr>";
-      html_table_line += "<td>" + rank + "</td>";
-      html_table_line += "<td>" + value.player_name + "</td>";
-      html_table_line += "<td>" + Math.round(value.player_score) + "</td>";
-      html_table_line += "</tr>";
-      $("#playersTable").append(html_table_line);
-      rank++;
-    });
-  });
-
-  /**
-   * When progression leaderboard results are received
-   */
-  socket.on("quiz_is_finished", function(data) {
-    // Print details of received data  
-    console.log("=> socket.io::quiz_is_finished : " + JSON.stringify(data));
-
-    // Choose the screen to print in the browser
-    $("#choosing").css("display", "none");
-    $("#naming").css("display", "none");
-    $("#gaming").css("display", "none");
-    $("#checking").css("display", "none");
-    $("#sorting").css("display", "none");
-    $("#thanking").css("display", "block");
-    $("#ending").css("display", "none");
-  });
-
-  /**
-   * Tell the server that we need the leaderboard for the whole progression
-   */  
-  $("#getProgressionLeaderboard").click(function(){
-    // Print button details
-    console.log("=> button::#getProgressionLeaderboard) : ");  
-
-    // Tell server that we need the progression leaderboard
-    socket.emit("progression_leaderboard_request");    
-  });
-
-  /**
-   * When progression leaderboard results are received
-   */
-  socket.on("progression_leaderboard_response", function(data) {
-    // Print details of received data  
-    console.log("=> socket.io::progression_leaderboard_response : " + JSON.stringify(data));
-
-    // Choose the screen to print in the browser
-    $("#choosing").css("display", "none");
-    $("#naming").css("display", "none");
-    $("#gaming").css("display", "none");
-    $("#checking").css("display", "none");
-    $("#sorting").css("display", "none");
-    $("#thanking").css("display", "none");
-    $("#ending").css("display", "block");
-
-    // Remove the lines of the last leaderboard
-    $("#playersFinalTable").empty();
-
-    // Construct the leaderboard table line by line
-    let rank = 1;
-    $.each(data.leaderboard, function(key, value) {
-      let html_table_line = "<tr>";
-      html_table_line += "<td>" + rank + "</td>";
-      html_table_line += "<td>" + value.player_name + "</td>";
-      html_table_line += "<td>" + Math.round(value.player_score) + "</td>";
-      html_table_line += "</tr>";
-      $("#playersFinalTable").append(html_table_line);
-      rank++;
-    });
-  });
-
-  
 });

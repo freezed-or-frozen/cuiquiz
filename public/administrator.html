@@ -65,11 +65,17 @@
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
             <ul class="navbar-nav mr-auto">
               <li class="nav-item">
-                <a class="nav-link" href="/">Accueil</a>
-            </li>                
-            <li class="nav-item">
-                <a class="nav-link" href="/a-propos">A propos</a>
-            </li>
+                <a id="progressionsButton" class="nav-link" href="#">Progressions</a>
+              </li>                
+              <li class="nav-item">
+                  <a id="quizzesButton" class="nav-link" href="#">Quizzes</a>
+              </li>
+              <li class="nav-item">
+                <a id="sessionsButton" class="nav-link" href="#">Sessions</a>
+              </li>
+              <li class="nav-item">
+                <a id="groupsButton" class="nav-link" href="#">Groups</a>
+              </li>
             </ul>
         </div>
     </nav>
@@ -86,51 +92,101 @@
         </div>
       </div>
 
-      <!-- Screen #-1 : authenticating -->
-      <div id="authenticating">
-        <h2>Authentication</h2>
-        <div class="form-group">
-          <label>Your password :</label>
-          <input id="teacherPasswordInput" type="password" class="form-control" />
-        </div>        
-        <button id="teacherPasswordButton" class="btn btn-primary">Let me in</button>
-      </div>
-
-      <!-- Screen #0 : choosing the quiz to play -->
-      <div id="choosing">
-        <h2>Progression list</h2>
-        <div id="quizzes">
-          <table class="table">
-            <thead class="thead-dark">
-              <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Group</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="progressionsTable">
-            </tbody>          
-          </table>
-        </div>
-
-        <h2>Quizzes list</h2>
-        <div id="quizzes">
-          <table class="table">
-            <thead class="thead-dark">
-              <tr>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody id="quizzesTable">
-            </tbody>          
-          </table>
+      <!-- Screen #-1 : authentication -->
+      <div class="row">
+        <div class="col-lg-12">
+          <div id="authentication">
+            <h2>Authentication</h2>
+            <div class="form-group">
+              <label>Your password :</label>
+              <input id="administratorPasswordInput" type="password" class="form-control" />
+            </div>        
+            <button id="administratorPasswordButton" class="btn btn-primary">Let me in</button>
+          </div>
         </div>
       </div>
 
+      <!-- Screen #0 : progressions -->
+      <div class="row">
+        <div class="col-lg-12">
+          <div id="progressions">
+            <h2>Progression <button id="newProgressionButton" type="button" class="btn btn-primary">New</button></h2>
+            <table class="table">
+              <thead class="thead-dark">
+                <tr>
+                  <th>Id</th>
+                  <th>Name</th>
+                  <th>Description</th>
+                  <th>Group</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="progressionsTable">
+              </tbody>          
+            </table>            
+          </div>
+        </div>
+      </div>
+
+      <!-- Screen #1 : quizzes -->
+      <div class="row">
+        <div class="col-lg-12">
+          <div id="quizzes">
+            <h2>Quizzes <button id="newQuizButton" type="button" class="btn btn-primary">New</button></h2>
+            <table class="table">
+              <thead class="thead-dark">
+                <tr>
+                  <th>Id</th>
+                  <th>Title</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="quizzesTable">
+              </tbody>          
+            </table>            
+          </div>
+        </div>
+      </div>
+
+      <!-- Screen #2 : sessions -->
+      <div class="row">
+        <div class="col-lg-12">
+          <div id="sessions">
+            <h2>Sessions</h2>
+            <table class="table">
+              <thead class="thead-dark">
+                <tr>
+                  <th>Id</th>
+                  <th>Title</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="sessionsTable">
+              </tbody>          
+            </table>        
+          </div>
+        </div>
+      </div>
+
+      <!-- Screen #3 : groups -->
+      <div class="row">
+        <div class="col-lg-12">
+          <div id="groups">
+            <h2>Groups</h2>
+            <table class="table">
+              <thead class="thead-dark">
+                <tr>
+                  <th>Id</th>
+                  <th>Title</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="groupsTable">
+              </tbody>          
+            </table>        
+          </div>
+        </div>
+      </div>
       
 
     </div><!-- /.container -->

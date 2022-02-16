@@ -40,4 +40,3 @@ Javascript server side librairies (see package.json) :
 - sqlite3
 - markdown-it
 - yaml
-

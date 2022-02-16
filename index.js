@@ -62,7 +62,7 @@ app.get("/student", (req, res) => {
 });
 
 app.get("/teacher", (req, res) => {
-  res.sendFile(__dirname + PUBLIC_PATH + "/teacher.html");
+  res.sendFile(__dirname + PUBLIC_PATH + "/test_teacher.html");
 });
 
 app.get("/administrator", (req, res) => {
@@ -125,6 +125,26 @@ io.on("connection", (socket) => {
 
     // Send our response    
     socket.emit("teacher_password_response", CurrentSession);
+    console.log(CurrentSession);
+  });
+
+  /**
+   * When an administrator try to authenticate
+   */
+  socket.on("administrator_password_request", (data) => {
+
+    // Print request details
+    console.log(" => administrator_password_request : " + JSON.stringify(data) );
+
+    // Check if it is the good password
+    if (data.administrator_password == "aze") {
+      CurrentSession["session_token"] = socket.id;
+    } else {
+      CurrentSession["session_token"] = "NOPE";
+    }
+
+    // Send our response    
+    socket.emit("administrator_password_response", CurrentSession);
     console.log(CurrentSession);
   });
 
