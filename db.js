@@ -11,7 +11,7 @@ const path = require("path");
 
 // Open SQLite database
 const db_name = path.join(__dirname, "data", "cuiquiz.sqlite");
-console.error("  path : " + db_name);
+//console.error("  path : " + db_name);
 var db = new sqlite3.Database("./data/cuiquiz.sqlite", (error) => {
   if (error) {    
     console.error(" => ERROR : " + error.message);    

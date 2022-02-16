@@ -1,5 +1,5 @@
 /**
- * CuiQuiz project :: import
+ * CuiQuiz project :: administrate quizzes from command line
  * 
  * Import quiz from Markdown file into SQLite database
  */
@@ -232,45 +232,79 @@ function json2sql(json_quiz) {
 //==========================================================================
 
 // Banner
-console.log("***************************");
-console.log("*** CuiQuiz import v0.1 ***");
-console.log("***************************");
-//console.log(" => parameters : " + process.argv);
+console.log("***********************************");
+console.log("*** CuiQuiz administration v0.1 ***");
+console.log("***********************************");
 
 // Read command line parameter
 var quiz_file = "";
-if (process.argv.length != 3) {
-  console.log("ERROR : problem with command line parameter");
-  console.log("  + example : node ./import.js data/my_quiz.md");
+var action = "";
+if (process.argv.length < 3) {
+  console.log("ERROR : problem with command line action and/or parameter");
+  console.log("  + usage   : node ./admin.js [command] [parameter]");
+  console.log("  + example : node ./admin.js help");
 } else {
-  // Isolate Markdown quiz file
-  quiz_file = process.argv[2];
+  // Isolate action to do
+  action = process.argv[2];
 
-  // Open and read file content
-  fs.readFile(__dirname + "/" + quiz_file, "utf8" , (error, md_quiz) => {
-
-    console.log(" => opening quiz : " + quiz_file);
-    if (error) {
-      console.error(error)
-      return
-    }
-    console.log(md_quiz);
-
-    // MD -> JSON
-    const json_quiz = md2json(md_quiz);
-    console.log(json_quiz);
-    // JSON -> SQL
-    json2sql(json_quiz);
- 
-    /*    
-    // Add new quiz
-    db.delete_quiz(13, (error, quiz_id) => {
-      console.log(" + quiz deleted !");
-    });
-    */
-
+  if (action == "help") {
+    console.log("Commands :");
+    console.log("  + help : print this message");
+    console.log("  + quiz_list : list all quizzes into database");
+    console.log("  + quiz_import : import [parameter=path_to_file] quiz into database");
+    console.log("  + quiz_delete : delete [parameter=quiz_id] quiz");
     
-  
-  });
+  } else if (action == "quiz_import") {
+    if (process.argv.length == 4) {
+      // Isolate Markdown quiz file
+      quiz_file = process.argv[3];
+
+      // Open and read file content
+      fs.readFile(__dirname + "/" + quiz_file, "utf8" , (error, md_quiz) => {
+
+        console.log(" => opening quiz : " + quiz_file);
+        if (error) {
+          console.error(error)
+          return
+        }
+        console.log(md_quiz);
+
+        // MD -> JSON
+        const json_quiz = md2json(md_quiz);
+        console.log(json_quiz);
+
+        // JSON -> SQL
+        json2sql(json_quiz);        
+      });
+    } else {
+      console.log("ERROR : problem with quiz_import command");
+      console.log("  + usage   : node ./admin.js quiz_import [parameter]");
+      console.log("  + example : node ./admin.js quiz_import data/test01.md");
+    }
+  } else if (action == "quiz_list") {
+    // Get all quizzes and print on screen
+    db.get_all_quizzes( (error, quizzes) => {
+      console.log(quizzes);
+    });
+  } else if (action == "quiz_delete") {
+    if (process.argv.length == 4) {
+      // Isolate quiz id to delete
+      quiz_id = process.argv[3]; 
+          
+      // Add new quiz
+      db.delete_quiz(quiz_id, (error, quiz_id) => {
+        console.log(" + quiz deleted !");
+      });
+      
+    } else {
+      console.log("ERROR : problem with quiz_delete command");
+      console.log("  + usage   : node ./admin.js quiz_delete [parameter]");
+      console.log("  + example : node ./admin.js quiz_delete 13");
+    }
+  } else {
+    console.log("ERROR : problem with command line action");
+    console.log("  + usage   : node ./admin.js [command] [parameter]");
+    console.log("  + example : node ./admin.js help");
+  }  
 }
 
