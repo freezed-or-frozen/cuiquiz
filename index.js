@@ -63,7 +63,7 @@ app.get("/student", (req, res) => {
 });
 
 app.get("/teacher", (req, res) => {
-  res.sendFile(__dirname + PUBLIC_PATH + "/test_teacher.html");
+  res.sendFile(__dirname + PUBLIC_PATH + "/teacher.html");
 });
 
 app.get("/administrator", (req, res) => {

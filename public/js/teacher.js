@@ -106,15 +106,29 @@ $(document).ready(function(){
       html_table_line += "<td>" + value.progression_description + "</td>";
       html_table_line += "<td>" + value.group_name + "</td>";
       html_table_line += "<td><button id=\"" + value.progression_id + "\" type=\"button\" ";
-      html_table_line += "class=\"btn btn-primary selectable\">";
-      html_table_line += "Choose</button></td>";
+      html_table_line += "class=\"btn btn-success selectable\">";
+      html_table_line += "Choose</button>";
+      html_table_line += "<button id=\"" + value.progression_id + "\" type=\"button\" ";
+      html_table_line += "class=\"btn btn-primary printable\">";
+      html_table_line += "Results</button></td>";
       html_table_line += "</tr>";
       $("#progressionsTable").append(html_table_line);
     });
   });
 
   /**
-   * When clicking to choose a progression
+   * When clicking to choose a progression to print results
+   */
+  $(document).on("click", ".printable" ,function (event) {      
+    // Print details of event
+    console.log("=> button::.printable : " + this.id);        
+
+    // Send selected quiz_id thru socket.io
+    socket.emit("progression_leaderboard_request", {"progression_id": this.id});
+  });
+
+  /**
+   * When clicking to choose a progression to play into
    */
   $(document).on("click", ".selectable" ,function (event) {      
     // Print details of event
