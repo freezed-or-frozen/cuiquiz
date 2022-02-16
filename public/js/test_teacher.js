@@ -41,6 +41,39 @@ $(document).ready(function(){
         html_table_line += "</tr>";
         $("#playersTable").append(html_table_line);
     });
+
+    $("#questionDetailsButton").click(function(){      
+      console.log("=> question_details_request_test");  
+      let request = {};
+      request["quiz_id"] = 14;
+      request["question_position"] = 1;
+      socket.emit("question_details_request_test", request);       
+    });
+
+  /**
+   * When a new question arrived
+   */
+  socket.on("question_details_response", function(data) {
+    // Print details of received data    
+    console.log("=> socket.io::question_details_response : " + JSON.stringify(data));
+
+    // Choose the screen to print in the browser
+    $("#choosing").css("display", "none");
+    $("#naming").css("display", "none");
+    $("#gaming").css("display", "block");
+    $("#checking").css("display", "none");
+    $("#sorting").css("display", "none");
+    $("#thanking").css("display", "none");
+    $("#ending").css("display", "none");
+
+    // Print question content
+    $("#questionText").html(data.question.question_text);
+    $("#questionAnswer0").html(data.answers[0]);
+    $("#questionAnswer1").html(data.answers[1]);
+    $("#questionAnswer2").html(data.answers[2]);
+    $("#questionAnswer3").html(data.answers[3]);    
+  });
+
     $("#add_code").click(function(){      
       console.log("=> add_code");
       /*

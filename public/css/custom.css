@@ -1,0 +1,23 @@
+.CodeMirror {
+  border: 1px solid #eee;
+  height: auto;
+}
+
+#questionText {
+  height: 400px;
+  border: 1px dashed #afafaf;
+  background-color: #efefef;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+/*
+#questionText p {
+  font-size: 15px;
+}
+*/
+
+.img-custom {
+  max-height: 300px;
+  max-width: 100%;
+}

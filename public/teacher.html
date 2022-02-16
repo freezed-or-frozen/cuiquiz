@@ -16,12 +16,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.1/theme/monokai.min.css" integrity="sha512-R6PH4vSzF2Yxjdvb2p2FA06yWul+U0PDDav4b/od/oXf9Iw37zl10plvwOXelrjV2Ai7Eo3vyHeyFUjhXdBCVQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     
     <!-- Custom CSS -->
-    <style>
-      .CodeMirror {
-        border: 1px solid #eee;
-        height: auto;
-      }
-    </style>
+    <link rel="stylesheet" href="css/custom.css" />
     
 
     <!-- Javascript libraries-->
@@ -145,6 +140,7 @@
       <div id="gaming">
         <div id="question">        
           <div class="container">
+            
             <div class="row">
               <div class="col-1 align-self-center">
                 <span class="badge badge-pill badge-dark">
@@ -153,15 +149,13 @@
                 <button id="endBeforeTimeUp" type="button" class="btn btn-secondary">End</button>
               </div>
               <div class="col-10 align-self-start">
-                <div class="jumbotron">
-                <h2><span id="questionText"></span></h2>
-              </div>
+                <div id="questionText"></div>
               </div>
               <div class="col-1 align-self-center">
                 <span id="answersNumber">0</span> answer(s)
-              </div>
-              
+              </div>              
             </div>
+
             <div class="row">
               <div class="col">
                 <button id="redButton" type="button" class="btn btn-block btn-danger">

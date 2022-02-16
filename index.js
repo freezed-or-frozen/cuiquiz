@@ -530,6 +530,56 @@ io.on("connection", (socket) => {
       socket.broadcast.emit("progression_leaderboard_response", response);
     });
   });
+
+
+  //==========================================================================
+  // Just for testing purpose
+  //==========================================================================
+  /**
+   * When we want to test the question print on teacher page
+   */
+  socket.on("question_details_request_test", (data) => {
+    // Print request details
+    console.log(" => question_details_request_test : " + JSON.stringify(data) );
+       
+    // Get the next question if exists
+    let response = {};
+    db.get_question_id_from_position(
+      data.quiz_id,
+      data.question_position,
+      (error, question) => {
+        console.log("  + question : " + JSON.stringify(question) );
+
+        // If there is a question left in the quiz...
+        if (question) {
+          console.log(" => quiz is not finished, let's go for a(nother) question");
+          response["error"] = error;
+          response["question"] = question;      
+          CurrentSession["question_id"] = question.question_id
+
+          // Get all answers for this question
+          db.get_all_answers(CurrentSession["question_id"], (error, answers) => {
+            response["error"] = error;
+            let prepared_answers = [null, null, null, null];
+            answers.forEach(answer => {
+              prepared_answers[ answer["answer_position"] ] = answer["answer_text"]
+            });          
+            response["answers"] = prepared_answers;    
+            console.log(response);
+            socket.emit("question_details_response", response);
+            socket.broadcast.emit("question_details_response", response);
+            CurrentSession["question_position"] += 1;
+            start_time = new Date();
+          });
+        } else {
+          console.log(" => quiz is finished, let's go to progression leaderboard directly");
+          CurrentSession["quiz_state"] = 2;
+          socket.emit("quiz_is_finished", response);
+          socket.broadcast.emit("quiz_is_finished", response);
+          console.log(" => quiz is finished2, let's go to progression leaderboard directly");
+        } 
+    });
+  });
 });
 
 
