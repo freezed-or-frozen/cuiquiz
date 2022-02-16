@@ -1,5 +1,6 @@
 # Files and folders to ignore
 data/cuiquiz.sqlite
 data/*.json
+data/*.md
 node_modules/
 package-lock.json
