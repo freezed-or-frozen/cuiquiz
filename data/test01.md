@@ -19,7 +19,9 @@ Quel est le nom du bonhomme de neige ?
 
 Qu'affichera cet extrait de code ? 
 ```cpp
-cout << "Frozen" << endl;
+for (int i=0; i<5; i++) {
+  cout << "Frozen" << endl;
+}
 ```
 - Une erreur
 - Quelque chose

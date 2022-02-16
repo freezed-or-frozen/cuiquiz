@@ -52,8 +52,8 @@ $(document).ready(function(){
     $("#questionDetailsButton").click(function(){      
       console.log("=> question_details_request_test");  
       let request = {};
-      request["quiz_id"] = 14;
-      request["question_position"] = 3;
+      request["quiz_id"] = 15;
+      request["question_position"] = 1;
       socket.emit("question_details_request_test", request);       
     });
 

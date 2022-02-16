@@ -102,7 +102,23 @@ function md2json(markdown_quiz) {
         console.log(token.content + " (" + question_position + ")");
         
         question = {};
-        question["question_text"] = token.content;
+        let question_text = "";
+        question_text += "<p class=\"lead\">";
+        question_text += token.content;
+        question_text += "</p>";
+        question_text = question_text.replace(
+          /!\((https?:\/\/\S+\.\w+)\)/gm,
+          "<img src=\"$1\" class=\"img-custom\" alt=\"...\">"
+        );
+        //question_text.replace("https", "img");
+        question["question_text"] = question_text;
+
+        // Transform image
+        
+        //question["question_text"].replace("!(", "<img src=\"");
+        //question["question_text"].replace(")", "\" class=\"img-custom\" alt=\"...\">");
+
+        // Prepare the rest of the question
         question["question_position"] = question_position;
         question["question_time"] = quiz["question_time"];
         question["quiz_id_fk"] = quiz_id;
@@ -134,7 +150,9 @@ function md2json(markdown_quiz) {
     // Get a piece of code
     if (token.type == "fence") {
       code_language = token.info;
-      question_text += token.content
+      question["question_text"] += "<pre><code class=\"language-" + token.info + "\">";
+      question["question_text"] += token.content;
+      question["question_text"] += "</code></pre>";
       new_question = false;
       console.log("[CODE-" + token.info + "]" + token.content + "[CODE]");        
     }    
@@ -240,7 +258,7 @@ if (process.argv.length != 3) {
 
     // MD -> JSON
     const json_quiz = md2json(md_quiz);
-
+    console.log(json_quiz);
     // JSON -> SQL
     json2sql(json_quiz);
  
