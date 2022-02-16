@@ -17,6 +17,7 @@ $(document).ready(function(){
   $("#authentication").css("display", "block");
   $("#progressions").css("display", "none");
   $("#quizzes").css("display", "none");
+  $("#markdown").css("display", "none");
   $("#sessions").css("display", "none");
   $("#groups").css("display", "none");
   
@@ -73,6 +74,7 @@ $(document).ready(function(){
       $("#authentication").css("display", "none");
       $("#progressions").css("display", "none");
       $("#quizzes").css("display", "none");
+      $("#markdown").css("display", "none");
       $("#sessions").css("display", "none");
       $("#groups").css("display", "none");
     }
@@ -98,6 +100,7 @@ $(document).ready(function(){
       $("#authentication").css("display", "none");
       $("#progressions").css("display", "block");
       $("#quizzes").css("display", "none");
+      $("#markdown").css("display", "none");
       $("#sessions").css("display", "none");
       $("#groups").css("display", "none");     
 
@@ -147,6 +150,7 @@ $(document).ready(function(){
       $("#authentication").css("display", "none");
       $("#progressions").css("display", "none");
       $("#quizzes").css("display", "block");
+      $("#markdown").css("display", "none");
       $("#sessions").css("display", "none");
       $("#groups").css("display", "none");  
       
@@ -167,12 +171,53 @@ $(document).ready(function(){
       let html_table_line = "<tr>";
       html_table_line += "<td>" + value.quiz_id + "</td>";
       html_table_line += "<td>" + value.quiz_title + "</td>";
+      html_table_line += "<td>" + value.quiz_description + "</td>";
       html_table_line += "<td><button id=\"" + value.quiz_id + "\" type=\"button\" ";
       html_table_line += "class=\"btn btn-danger deletable\">";
       html_table_line += "Delete</button></td>";
       html_table_line += "</tr>";
       $("#quizzesTable").append(html_table_line);
     });
+  });
+
+  /**
+   * When administrator clicks on new quiz button
+   */
+  $("#newQuizButton").click(function(){
+    // Print details of clicked button
+    console.log("=> button::newQuizButton : ");
+
+    // Check authentication
+    if (CurrentSession.session_token) {
+      // Change the screen to print in the browser
+      $("#notification").html("<div class=\"alert alert-xxx\" role=\"alert\"></div>");
+      $("#authentication").css("display", "none");
+      $("#progressions").css("display", "none");
+      $("#quizzes").css("display", "none");
+      $("#markdown").css("display", "block");
+      $("#sessions").css("display", "none");
+      $("#groups").css("display", "none");       
+    }
+  });
+
+  /**
+   * When administrator clicks on add quiz button
+   */
+  $("#addQuizButton").click(function(){
+    // Print details of clicked button
+    console.log("=> button::addQuizButton : ");
+
+    // Check authentication
+    if (CurrentSession.session_token) {
+
+      // Read markdown quiz and send it to the server
+      let quiz_markdown = $("#quizMarkdown").val();
+      console.log("  + quiz_markdown : " + quiz_markdown); 
+      socket.emit(
+        "quiz_add_request",
+        {"quiz_markdown": quiz_markdown}
+      );
+    }
   });
 
 
@@ -194,6 +239,7 @@ $(document).ready(function(){
       $("#authentication").css("display", "none");
       $("#progressions").css("display", "none");
       $("#quizzes").css("display", "none");
+      $("#markdown").css("display", "none");
       $("#sessions").css("display", "block");
       $("#groups").css("display", "none");     
     }
@@ -218,6 +264,7 @@ $(document).ready(function(){
       $("#authentication").css("display", "none");
       $("#progressions").css("display", "none");
       $("#quizzes").css("display", "none");
+      $("#markdown").css("display", "none");
       $("#sessions").css("display", "none");
       $("#groups").css("display", "block");     
     }

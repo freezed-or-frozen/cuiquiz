@@ -16,8 +16,9 @@ app.use(express.static("public"));
 const { Server } = require("socket.io");
 const io = new Server(server);
 
-// For custom db driver
+// For custom db driver and import
 const db = require("./db");
+
 /*
 // For SQLite3 database
 var sqlite3 = require("sqlite3").verbose();
