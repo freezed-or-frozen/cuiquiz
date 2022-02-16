@@ -299,6 +299,12 @@ $(document).ready(function(){
     $("#questionAnswer2").html(data.answers[2]);
     $("#questionAnswer3").html(data.answers[3]);
 
+    // Hightlight color syntax
+    document.querySelectorAll("pre code").forEach((block) => {      
+      hljs.highlightElement(block);
+      hljs.lineNumbersBlock(block);
+    });
+
     // Start the timer
     CurrentSession.timer_state = true;
     CurrentSession.timer_value = data.question.question_time;

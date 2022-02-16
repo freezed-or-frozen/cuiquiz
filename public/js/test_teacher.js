@@ -5,6 +5,13 @@ $(document).ready(function(){
     // Send server that a new client is connected
     var socket = io();
 
+    // Init highlight
+    //hljs.highlightAll();
+    //hljs.initLineNumbersOnLoad();
+    //$('code.hljs').each(function(i, block) {
+    //    hljs.lineNumbersBlock(block);
+    //});
+
     // Tests
     $("#quizzes_list_request").click(function(){      
         console.log("=> quizzes_list_request");  
@@ -46,7 +53,7 @@ $(document).ready(function(){
       console.log("=> question_details_request_test");  
       let request = {};
       request["quiz_id"] = 14;
-      request["question_position"] = 1;
+      request["question_position"] = 3;
       socket.emit("question_details_request_test", request);       
     });
 
@@ -71,7 +78,14 @@ $(document).ready(function(){
     $("#questionAnswer0").html(data.answers[0]);
     $("#questionAnswer1").html(data.answers[1]);
     $("#questionAnswer2").html(data.answers[2]);
-    $("#questionAnswer3").html(data.answers[3]);    
+    $("#questionAnswer3").html(data.answers[3]);      
+    
+    // Hightlight color syntax
+    document.querySelectorAll("pre code").forEach((block) => {      
+      hljs.highlightElement(block);
+      hljs.lineNumbersBlock(block);
+    });
+    
   });
 
     $("#add_code").click(function(){      
