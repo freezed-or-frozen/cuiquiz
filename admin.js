@@ -247,14 +247,17 @@ if (process.argv.length < 3) {
   // Isolate action to do
   action = process.argv[2];
 
+  // Help section
   if (action == "help") {
     console.log("Commands :");
     console.log("  + help : print this message");
     console.log("  + quiz_list : list all quizzes into database");
     console.log("  + quiz_import : import [parameter=path_to_file] quiz into database");
-    console.log("  + quiz_delete : delete [parameter=quiz_id] quiz");
-    
-  } else if (action == "quiz_import") {
+    console.log("  + quiz_delete : delete [parameter=quiz_id] quiz");    
+  }
+
+  // Quiz section
+  else if (action == "quiz_import") {
     if (process.argv.length == 4) {
       // Isolate Markdown quiz file
       quiz_file = process.argv[3];
@@ -291,7 +294,7 @@ if (process.argv.length < 3) {
       // Isolate quiz id to delete
       quiz_id = process.argv[3]; 
           
-      // Add new quiz
+      // Delete quiz
       db.delete_quiz(quiz_id, (error, quiz_id) => {
         console.log(" + quiz deleted !");
       });
@@ -301,10 +304,32 @@ if (process.argv.length < 3) {
       console.log("  + usage   : node ./admin.js quiz_delete [parameter]");
       console.log("  + example : node ./admin.js quiz_delete 13");
     }
+  }
+
+  // Session section
+  else if (action == "session_list") {
+    // Get all sessions and print on screen
+    db.get_all_sessions( (error, sessions) => {
+      console.log(sessions);
+    });
+  } else if (action == "session_delete") {
+    if (process.argv.length == 4) {
+      // Isolate session id to delete
+      session_id = process.argv[3]; 
+          
+      // Delete session
+      db.delete_session(session_id, (error, session_id) => {
+        console.log(" + session deleted !");
+      });      
+    } else {
+      console.log("ERROR : problem with quiz_delete command");
+      console.log("  + usage   : node ./admin.js quiz_delete [parameter]");
+      console.log("  + example : node ./admin.js quiz_delete 13");
+    }
   } else {
-    console.log("ERROR : problem with command line action");
-    console.log("  + usage   : node ./admin.js [command] [parameter]");
-    console.log("  + example : node ./admin.js help");
+      console.log("ERROR : problem with command line action");
+      console.log("  + usage   : node ./admin.js [command] [parameter]");
+      console.log("  + example : node ./admin.js help");
   }  
 }
 

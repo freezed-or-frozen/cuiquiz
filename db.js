@@ -266,6 +266,17 @@ function get_last_session(callback) {
   });	
 }
 
+function get_all_sessions(callback) {
+  db.all(`
+    SELECT * 
+    FROM Session
+    ORDER BY session_id DESC
+    LIMIT 10;`,
+    [], (error, rows) => {
+      callback(error, rows);
+  });	
+}
+
 function get_good_answer_for_question(question_id, callback) {
   db.get(`
     SELECT Answer.answer_position, Answer.answer_text
@@ -377,6 +388,20 @@ function delete_quiz(quiz_id, callback) {
   });	
 }
 
+function delete_session(session_id, callback) {
+  db.run(`
+    DELETE FROM Participation
+    WHERE Participation.session_id_fk = ?;`,
+    [session_id], function(error, row) {
+      db.run(`
+        DELETE FROM Session
+        WHERE Session.session_id = ?;`,
+        [session_id], function(error, row) {      
+          callback(error, this.lastID);
+      });      
+  });	
+}
+
 /*
 SELECT	CASE 
 			WHEN 0 = 0
@@ -432,4 +457,6 @@ module.exports = {
   add_new_question,
   add_new_answer,
   delete_quiz,
+  delete_session,
+  get_all_sessions
 }
