@@ -25,7 +25,7 @@ function md2json(markdown_quiz) {
   console.log("===== md2json =====");
 
   // Convert markdown into an array of tokens thanks to markdown-it library
-  const tokens = md.parse(markdown_quiz);
+  const tokens = md.parse(markdown_quiz, {references: {}});
   console.log(tokens);
 
   // Variables
