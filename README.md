@@ -6,6 +6,7 @@ Web app quiz game like **Kahoot!** to use in a classroom
 
 
 ## 2 - Installation
+### 2.1 - The simplest way
 Install all dependencies with **npm**
 ```
 npm ci
@@ -19,6 +20,14 @@ node ./index.js
 In a web browser : 
 - (http://127.0.0.1:3000/teacher) for teacher
 - (http://127.0.0.1:3000/student) for student
+
+
+### 2.2 - The Docker way
+I follow this tutorial to prepare deployment files :
+(https://nodejs.org/en/docs/guides/nodejs-docker-webapp/)
+
+
+
 
 
 ## 3 - Thanks

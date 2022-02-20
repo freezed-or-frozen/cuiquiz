@@ -10,9 +10,9 @@
     "dependencies": {
         "express": "^4.17.2",
         "markdown-it": "12.3.2",
-        "parse-md": "^2.0.4",
         "socket.io": "^4.4.1",
         "sqlite3": "^5.0.2",
-        "yaml": "^1.10.2"
+        "yaml": "^1.10.2",
+        "dotenv": "16.0.0"
     }
 }

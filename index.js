@@ -16,6 +16,9 @@ app.use(express.static("public"));
 const { Server } = require("socket.io");
 const io = new Server(server);
 
+// For credentials
+const dotenv = require('dotenv').config();
+
 // For custom db driver and import
 const db = require("./db");
 
@@ -118,7 +121,7 @@ io.on("connection", (socket) => {
     };
 
     // Check if it is the good password
-    if (data.teacher_password == "aze") {
+    if (data.teacher_password == process.env.TEACHER_PASSWORD) {
       CurrentSession["session_token"] = socket.id;
     } else {
       CurrentSession["session_token"] = "NOPE";
@@ -138,7 +141,7 @@ io.on("connection", (socket) => {
     console.log(" => administrator_password_request : " + JSON.stringify(data) );
 
     // Check if it is the good password
-    if (data.administrator_password == "aze") {
+    if (data.administrator_password == process.env.TEACHER_PASSWORD) {
       CurrentSession["session_token"] = socket.id;
     } else {
       CurrentSession["session_token"] = "NOPE";
