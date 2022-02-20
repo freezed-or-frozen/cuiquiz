@@ -2,6 +2,11 @@
     "name": "cuiquiz",
     "version": "0.0.1",
     "description": "Web app quiz game like **Kahoot!** to use in a classroom",
+    "author": "<freezed.or.frozen@gmail.com>",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js"
+    },
     "dependencies": {
         "express": "^4.17.2",
         "markdown-it": "12.3.2",
