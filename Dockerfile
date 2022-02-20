@@ -18,4 +18,4 @@ RUN npm ci --only=production
 COPY . .
 
 # Command to start server
-CMD [ "node", "server.js" ]
+CMD [ "node", "index.js" ]
