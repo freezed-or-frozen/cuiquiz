@@ -227,6 +227,12 @@ $(document).ready(function(){
    * @param {*} new_state 
    */
   function change_all_buttons_states(new_state) {
+    if (new_state == true) {
+      $("#answerState").html("Wait...");
+    } else {
+      $("#answerState").html("Choose an answer...");
+    }
+    
     $("#redButton").prop("disabled", new_state);
     $("#blueButton").prop("disabled", new_state);
     $("#yellowButton").prop("disabled", new_state);

@@ -46,6 +46,7 @@ Concerning the **player** :
 ### Quiz
 - [X] add symbols on the teacher's pages question
 - [X] question ends twice (time's up and end button)
+- [ ] question text font in black color
 
 ### Security
 - [X] everybody can access teacher's page
