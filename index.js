@@ -107,7 +107,7 @@ app.post("/auth", function(request, response) {
   } else {
     CurrentSession["session_token"] = "NOPE";
     //response.sendFile(__dirname + HTML_PATH + "/login.html");
-    response.redirect("/login");
+    response.redirect("/cuiquiz/login");
   }
 });
 
