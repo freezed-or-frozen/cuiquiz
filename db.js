@@ -129,6 +129,17 @@ function get_player_id(player_name, callback) {
   });	
 }
 
+function get_player_id_from_group(player_name, group_id, callback) {
+  db.get(`
+    SELECT * 
+    FROM Player
+    WHERE player_name LIKE ?
+    AND group_id_fk = ?;`,
+    [player_name, group_id], (error, rows) => {
+      callback(error, rows);
+  });	
+}
+
 function get_stats_for_question_id(question_id, callback) {
   db.all(`
     SELECT * 
@@ -456,6 +467,7 @@ module.exports = {
   get_all_players,
   get_players_from_group,
   get_player_id,
+  get_player_id_from_group,
   get_stats_for_question_id,
   get_players_who_gives_answer,
   get_players_answers,

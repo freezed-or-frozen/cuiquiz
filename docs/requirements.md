@@ -39,7 +39,9 @@ Concerning the **player** :
 
 ### Participation
 - [X] a player can start a quiz already started
+- [X] a player can subscribe even if not in the database
 - [X] a player can subscribes twice
+- [X] a player can subscribe even if not in the list, but in the database
 
 ### Quiz
 - [X] add symbols on the teacher's pages question
@@ -47,6 +49,6 @@ Concerning the **player** :
 
 ### Security
 - [X] everybody can access teacher's page
-- [X] socket.io does not allow to secure enough teacher's page
+
 
 

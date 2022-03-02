@@ -332,22 +332,31 @@ io.on("connection", (socket) => {
     } 
     
     // If no error, let's add the player to the game
-    else {
-      // Add player name in the current session
-      CurrentSession["players"].push(data.player_name);
-      console.log(CurrentSession);
+    else {    
 
       // Check if players exists              
-      db.get_player_id(data.player_name, (error, player) => {
-        response["error"] = error;
-        response["player"] = player;
-        response["session"] = CurrentSession;
-        
-        // Send response
-        console.log(response);
-        socket.emit("player_subscribe_response", response);
-        socket.broadcast.emit("player_subscribe_response", response);
-      });   
+      db.get_player_id_from_group(
+        data.player_name,
+        CurrentSession["group_id"],
+        (error, player) => {
+          response["error"] = error;
+          if (player) {
+            // Add player name in the current session
+            CurrentSession["players"].push(data.player_name);
+
+            // Prepare data for teacher
+            response["player"] = player;
+            response["session"] = CurrentSession;           
+          } else {
+            response["error"] = "Unknown player name";
+          }          
+          
+          // Finally send response
+          console.log(response);
+          socket.emit("player_subscribe_response", response);
+          socket.broadcast.emit("player_subscribe_response", response);
+        }
+      );   
     }    
   });
 
