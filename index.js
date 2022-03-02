@@ -27,14 +27,11 @@ var crypto = require('crypto');
 // For custom db driver and import
 const db = require("./db");
 
-/*
-// For SQLite3 database
-var sqlite3 = require("sqlite3").verbose();
-var db = new sqlite3.Database("db/cuiquiz.sqlite");
-*/
+
 // Some general constant and variables
 const TCP_PORT = 3000;
 const PUBLIC_PATH = "/public";
+const HTML_PATH = "/views";
 
 var CurrentSession = {
   "progression_id": 1,
@@ -61,22 +58,23 @@ var end_time;
  * Generate a random session id
  */
 function generate_session_id()  {
-  return crypto.randomBytes(16).toString('base64');
+  return crypto.randomBytes(16).toString("base64");
 }
+
 
 //
 // Routes
 //
 app.get("/", (request, response) => {
-  response.sendFile(__dirname + PUBLIC_PATH + '/index.html');
+  response.sendFile(__dirname + HTML_PATH + "/index.html");
 });
 
 app.get("/student", (request, response) => {
-  response.sendFile(__dirname + PUBLIC_PATH + "/student.html");
+  response.sendFile(__dirname + HTML_PATH + "/student.html");
 });
 
 app.get("/login", (request, response) => {
-  response.sendFile(__dirname + PUBLIC_PATH + "/login.html");
+  response.sendFile(__dirname + HTML_PATH + "/login.html");
 });
 
 app.post("/auth", function(request, response) {
@@ -105,16 +103,17 @@ app.post("/auth", function(request, response) {
 	// Ensure the password exists and is not empty
 	if ((password) && (password == process.env.TEACHER_PASSWORD)) {
     CurrentSession["session_token"] = generate_session_id();
-    response.sendFile(__dirname + PUBLIC_PATH + "/teacher.html");
+    response.sendFile(__dirname + HTML_PATH + "/teacher.html");
   } else {
     CurrentSession["session_token"] = "NOPE";
-    response.sendFile(__dirname + PUBLIC_PATH + "/login.html");
+    //response.sendFile(__dirname + HTML_PATH + "/login.html");
+    response.redirect("/login");
   }
 });
 
 /*
 app.get("/administrator", (request, response) => {
-  response.sendFile(__dirname + PUBLIC_PATH + "/administrator.html");
+  response.sendFile(__dirname + HTML_PATH + "/administrator.html");
 });
 */
 

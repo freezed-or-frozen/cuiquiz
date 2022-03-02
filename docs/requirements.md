@@ -47,5 +47,6 @@ Concerning the **player** :
 
 ### Security
 - [X] everybody can access teacher's page
+- [X] socket.io does not allow to secure enough teacher's page
 
 
