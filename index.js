@@ -10,7 +10,9 @@ const express = require("express");
 const app = express();
 const http = require("http");
 const server = http.createServer(app);
+
 app.use(express.static("public"));
+app.use(express.urlencoded({ extended: true }));  // to parse POST requests
 
 // For socket.io library
 const { Server } = require("socket.io");
@@ -18,6 +20,9 @@ const io = new Server(server);
 
 // For credentials
 const dotenv = require('dotenv').config();
+
+// For session id
+var crypto = require('crypto');
 
 // For custom db driver and import
 const db = require("./db");
@@ -52,26 +57,66 @@ var CurrentSession = {
 var start_time;
 var end_time;
 
+/**
+ * Generate a random session id
+ */
+function generate_session_id()  {
+  return crypto.randomBytes(16).toString('base64');
+}
 
 //
 // Routes
 //
-app.get("/", (req, res) => {
-  res.send("<h1>CuiQuiz v0.1</h1>");
-  //res.sendFile(__dirname + PUBLIC_PATH + '/index.html');
+app.get("/", (request, response) => {
+  response.sendFile(__dirname + PUBLIC_PATH + '/index.html');
 });
 
-app.get("/student", (req, res) => {
-  res.sendFile(__dirname + PUBLIC_PATH + "/student.html");
+app.get("/student", (request, response) => {
+  response.sendFile(__dirname + PUBLIC_PATH + "/student.html");
 });
 
-app.get("/teacher", (req, res) => {
-  res.sendFile(__dirname + PUBLIC_PATH + "/teacher.html");
+app.get("/login", (request, response) => {
+  response.sendFile(__dirname + PUBLIC_PATH + "/login.html");
 });
 
-app.get("/administrator", (req, res) => {
-  res.sendFile(__dirname + PUBLIC_PATH + "/administrator.html");
+app.post("/auth", function(request, response) {
+	// Retrieve the password
+  let password = request.body.password;
+  console.log(" => teacher's password : " + password);
+
+  // Prepare data for response
+  CurrentSession = {
+    "progression_id": 1,
+    "group_id": 0,
+    "session_id": 0,
+    "quiz_id": 0,
+    "quiz_title": "???",
+    "quiz_questions_number": 0,
+    "quiz_state": 0,
+    "question_id": 0,
+    "question_position": 1,
+    "question_text": "???",
+    "question_time" : 60,
+    "question_answers": [],
+    "clients": [],
+    "players": []         
+  };
+
+	// Ensure the password exists and is not empty
+	if ((password) && (password == process.env.TEACHER_PASSWORD)) {
+    CurrentSession["session_token"] = generate_session_id();
+    response.sendFile(__dirname + PUBLIC_PATH + "/teacher.html");
+  } else {
+    CurrentSession["session_token"] = "NOPE";
+    response.sendFile(__dirname + PUBLIC_PATH + "/login.html");
+  }
 });
+
+/*
+app.get("/administrator", (request, response) => {
+  response.sendFile(__dirname + PUBLIC_PATH + "/administrator.html");
+});
+*/
 
 
 //
@@ -131,26 +176,7 @@ io.on("connection", (socket) => {
     socket.emit("teacher_password_response", CurrentSession);
     console.log(CurrentSession);
   });
-
-  /**
-   * When an administrator try to authenticate
-   */
-  socket.on("administrator_password_request", (data) => {
-
-    // Print request details
-    console.log(" => administrator_password_request : " + JSON.stringify(data) );
-
-    // Check if it is the good password
-    if (data.administrator_password == process.env.TEACHER_PASSWORD) {
-      CurrentSession["session_token"] = socket.id;
-    } else {
-      CurrentSession["session_token"] = "NOPE";
-    }
-
-    // Send our response    
-    socket.emit("administrator_password_response", CurrentSession);
-    console.log(CurrentSession);
-  });
+  
 
   //==========================================================================
   // Step 1 : choosing a quiz to play
@@ -532,6 +558,119 @@ io.on("connection", (socket) => {
       socket.emit("progression_leaderboard_response", response);
       socket.broadcast.emit("progression_leaderboard_response", response);
     });
+  });
+
+
+  //==========================================================================
+  // Administration zone
+  //==========================================================================
+
+  /**
+   * When an administrator try to authenticate
+   */
+  socket.on("admin_password_request", (data) => {
+
+    // Print request details
+    console.log(" => admin_password_request : " + JSON.stringify(data) );
+
+    // Check if it is the good password
+    if (data.administrator_password == process.env.TEACHER_PASSWORD) {
+      CurrentSession["session_token"] = socket.id;
+    } else {
+      CurrentSession["session_token"] = "NOPE";
+    }
+
+    // Send our response    
+    socket.emit("admin_password_response", CurrentSession);
+    console.log(CurrentSession);
+  });
+
+  /**
+   * When a teacher needs the progressions list
+   */
+  socket.on("admin_progressions_list_request", (data) => {
+    // Print request details
+    console.log(" => admin_progressions_list_request : " + JSON.stringify(data) );
+    
+    // Get quizzes list and return thru socket.io      
+    let response = {};
+    db.get_all_progressions( (error, data) => {
+      response["error"] = error;
+      response["progressions"] = data;      
+      console.log(response);
+      socket.emit("admin_progressions_list_response", response);
+    });   
+  });
+
+  /**
+   * When an administrator wants to print the leaderboard of a progression
+   */
+  socket.on("admin_progression_leaderboard_request", (data) => {
+    // Print request details
+    console.log(" => admin_progression_leaderboard_request : " + JSON.stringify(data) );
+
+    // Get leaderboard for the whole progression and its sessions
+    let response = {};
+    db.get_leaderboard_for_progression(data.progression_id, (error, leaderboard) => {
+      response["error"] = error;
+      response["leaderboard"] = leaderboard;      
+      console.log(response);
+      socket.emit("admin_progression_leaderboard_response", response);
+    });
+  });
+
+  /**
+   * When an administrator needs the sessions list
+   */
+  socket.on("admin_sessions_list_request", (data) => {
+    // Print request details
+    console.log(" => admin_sessions_list_request : " + JSON.stringify(data) );
+    
+    // Get sessions list and return thru socket.io      
+    let response = {};
+    db.get_all_sessions( (error, data) => {
+      response["error"] = error;
+      response["sessions"] = data;      
+      console.log(response);
+      socket.emit("admin_sessions_list_response", response);
+    });   
+  });
+
+  /**
+   * When an administrator wants to delete a session
+   */
+  socket.on("admin_sessions_delete_request", (data) => {
+    // Print request details
+    console.log(" => admin_session_delete_request : " + JSON.stringify(data) );
+    
+    // Delete session
+    let response = {};
+    db.delete_session(data.session_id, (error, session_id) => {
+      response["error"] = error;
+      response["sessions"] = data;      
+      console.log(response);
+      socket.emit("admin_sessions_delete_request", response);
+    });  
+  });
+
+  /**
+   * When a teacher needs the quizzes list
+   */
+  socket.on("admin_quizzes_list_request", (data) => {
+    // Print request details
+    console.log(" => admin_quizzes_list_request : " + JSON.stringify(data) );
+    
+    // Save progression_id
+    CurrentSession["progression_id"] = data.progression_id;
+
+    // Get quizzes list and return thru socket.io      
+    let response = {};
+    db.get_all_quizzes( (error, data) => {
+      response["error"] = error;
+      response["quizzes"] = data;      
+      console.log(response);
+      socket.emit("admin_quizzes_list_response", response);
+    });   
   });
 
 

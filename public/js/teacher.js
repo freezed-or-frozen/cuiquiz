@@ -40,53 +40,17 @@ $(document).ready(function(){
 
 
   //==========================================================================
-  // Step 0 : authenticating
+  // Step 0 : starting
   //==========================================================================
   
   /**
    * When teacher click to send its password
    */
-  $("#teacherPasswordButton").click(function(){
-    // Print details of clicked button
-    console.log("=> button::playerPasswordButton : ");
-
-    // Read player's name and send it to the server
-    let teacher_password = $("#teacherPasswordInput").val();
-    console.log("  + teacher_password : " + teacher_password); 
-    socket.emit(
-      "teacher_password_request",
-      {"teacher_password": teacher_password}
-    ); 
+  $("#progressionButton").click(function(){
+    // Teacher wants to get the progression list
+    socket.emit("progressions_list_request", {"token": "..."});
   });
-
-  /**
-   * When the password is validated by the server
-   */
-  socket.on("teacher_password_response", function(data) {  
-    // Print details of received data    
-    console.log("=> socket.io::teacher_password_response : " + JSON.stringify(data));
-
-    if (data.session_token != "NOPE") {
-      // Save the session token
-      CurrentSession.session_token = data.session_token;
-          
-      // Change the screen to print in the browser
-      $("#authenticating").css("display", "none");
-      $("#choosing").css("display", "block");
-      $("#naming").css("display", "none");
-      $("#gaming").css("display", "none");
-      $("#checking").css("display", "none");
-      $("#sorting").css("display", "none");
-      $("#thanking").css("display", "none");
-      $("#ending").css("display", "none");
-
-      // Send server that a the teacher is authenticated and wants the list of quizzes
-      //socket.emit("quizzes_list_request", {"token": "..."});
-      socket.emit("progressions_list_request", {"token": "..."});
-    }    
-  });
-
-
+  
   //==========================================================================
   // Step 1 : choosing the progression, the quiz
   //==========================================================================
@@ -98,6 +62,16 @@ $(document).ready(function(){
     // Print details of received data      
     console.log("=> socket.io::progressions_list_response : " + JSON.stringify(data));      
     
+    // Choose the screen to print in the browser
+    $("#authenticating").css("display", "none");
+    $("#choosing").css("display", "block");
+    $("#naming").css("display", "none");
+    $("#gaming").css("display", "none");
+    $("#checking").css("display", "none");
+    $("#sorting").css("display", "none");
+    $("#thanking").css("display", "none");
+    $("#ending").css("display", "none");
+
     // Build tables's lines (1 quiz = 1 line)
     $.each(data.progressions, function(key, value) {
       let html_table_line = "<tr>";
