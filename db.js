@@ -270,8 +270,7 @@ function get_all_sessions(callback) {
   db.all(`
     SELECT * 
     FROM Session
-    ORDER BY session_id DESC
-    LIMIT 10;`,
+    ORDER BY session_date DESC;`,
     [], (error, rows) => {
       callback(error, rows);
   });	
@@ -402,6 +401,26 @@ function delete_session(session_id, callback) {
   });	
 }
 
+function delete_all_sessions_for_progression(progression_id, callback) {
+  db.run(`
+    DELETE FROM Participation
+    WHERE Participation.session_id_fk IN (
+      SELECT Session.session_id
+      FROM Session
+      WHERE progression_id_fk = ?);`,
+    [progression_id], function(error, row) {
+      db.run(`
+        DELETE FROM Session
+        WHERE Session.session_id IN (
+          SELECT Session.session_id
+          FROM Session
+          WHERE progression_id_fk = ?);`,
+        [progression_id], function(error, row) {      
+          callback(error, this.lastID);
+      });      
+  });	
+}
+
 /*
 SELECT	CASE 
 			WHEN 0 = 0
@@ -458,5 +477,6 @@ module.exports = {
   add_new_answer,
   delete_quiz,
   delete_session,
-  get_all_sessions
+  get_all_sessions,
+  delete_all_sessions_for_progression
 }

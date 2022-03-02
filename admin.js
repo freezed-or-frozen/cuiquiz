@@ -321,11 +321,27 @@ if (process.argv.length < 3) {
       db.delete_session(session_id, (error, session_id) => {
         console.log(" + session deleted !");
       });      
+
     } else {
       console.log("ERROR : problem with quiz_delete command");
-      console.log("  + usage   : node ./admin.js quiz_delete [parameter]");
-      console.log("  + example : node ./admin.js quiz_delete 13");
+      console.log("  + usage   : node ./admin.js session_delete [parameter]");
+      console.log("  + example : node ./admin.js session_delete 13");
     }
+  } else if (action == "session_delete_all") {
+    if (process.argv.length == 4) {
+      // Isolate session id to delete
+      progression_id = process.argv[3]; 
+          
+      // Delete session
+      db.delete_all_sessions_for_progression(progression_id, (error, progression_id) => {
+        console.log(" + all sessions deleted !");
+      });      
+
+    } else {
+      console.log("ERROR : problem with quiz_delete command");
+      console.log("  + usage   : node ./admin.js session_delete [parameter]");
+      console.log("  + example : node ./admin.js session_delete 13");
+    }  
   } else {
       console.log("ERROR : problem with command line action");
       console.log("  + usage   : node ./admin.js [command] [parameter]");

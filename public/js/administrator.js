@@ -52,7 +52,7 @@ $(document).ready(function(){
     let administrator_password = $("#administratorPasswordInput").val();
     console.log("  + administrator_password : " + administrator_password); 
     socket.emit(
-      "administrator_password_request",
+      "admin_password_request",
       {"administrator_password": administrator_password}
     ); 
   });
@@ -60,9 +60,9 @@ $(document).ready(function(){
   /**
    * When the password is validated by the server
    */
-  socket.on("administrator_password_response", function(data) {  
+  socket.on("admin_password_response", function(data) {  
     // Print details of received data    
-    console.log("=> socket.io::administrator_password_request : " + JSON.stringify(data));
+    console.log("=> socket.io::admin_password_request : " + JSON.stringify(data));
 
     if (data.session_token != "NOPE") {
       // Save the session token
@@ -105,18 +105,19 @@ $(document).ready(function(){
       $("#groups").css("display", "none");     
 
       // Ask for progressions list
-      socket.emit("progressions_list_request", {"token": "..."});
+      socket.emit("admin_progressions_list_request", {"token": "..."});
     }
   });
 
   /**
    * When a the list of progression arrive, we build a table 
    */
-  socket.on("progressions_list_response", function(data) { 
+  socket.on("admin_progressions_list_response", function(data) { 
     // Print details of received data      
-    console.log("=> socket.io::progressions_list_response : " + JSON.stringify(data));      
+    console.log("=> socket.io::admin_progressions_list_response : " + JSON.stringify(data));      
     
     // Build tables's lines (1 quiz = 1 line)
+    $("#progressionsTable").html();
     $.each(data.progressions, function(key, value) {
       let html_table_line = "<tr>";
       html_table_line += "<td>" + value.progression_id + "</td>";
@@ -124,11 +125,22 @@ $(document).ready(function(){
       html_table_line += "<td>" + value.progression_description + "</td>";
       html_table_line += "<td>" + value.group_name + "</td>";
       html_table_line += "<td><button id=\"" + value.progression_id + "\" type=\"button\" ";
-      html_table_line += "class=\"btn btn-primary selectable\">";
-      html_table_line += "Choose</button></td>";
+      html_table_line += "class=\"btn btn-primary progressionLeadertable\">";
+      html_table_line += "Leaderboard</button></td>";
       html_table_line += "</tr>";
       $("#progressionsTable").append(html_table_line);
     });
+  });
+
+  /**
+   * When clicking to print the leaderboard
+   */
+  $(document).on("click", ".progressionLeadertable" ,function (event) {      
+    // Print details of event
+    console.log("=> button::.progressionLeadertable : " + this.id);        
+
+    // Send selected quiz_id thru socket.io
+    socket.emit("admin_progression_leaderboard_request", {"progression_id": this.id});
   });
 
 
@@ -155,14 +167,14 @@ $(document).ready(function(){
       $("#groups").css("display", "none");  
       
       // Ask for quizzes list
-      socket.emit("quizzes_list_request", {"progression_id": 0});
+      socket.emit("admin_quizzes_list_request", {"progression_id": 0});
     }
   });
 
   /**
    * When a the list of quizzes arrive, we build a table 
    */
-  socket.on("quizzes_list_response", function(data) { 
+  socket.on("admin_quizzes_list_response", function(data) { 
     // Print details of received data      
     console.log("=> socket.io::quizzes_list_response : " + JSON.stringify(data));      
     
@@ -214,7 +226,7 @@ $(document).ready(function(){
       let quiz_markdown = $("#quizMarkdown").val();
       console.log("  + quiz_markdown : " + quiz_markdown); 
       socket.emit(
-        "quiz_add_request",
+        "admin_quiz_add_request",
         {"quiz_markdown": quiz_markdown}
       );
     }
@@ -241,8 +253,44 @@ $(document).ready(function(){
       $("#quizzes").css("display", "none");
       $("#markdown").css("display", "none");
       $("#sessions").css("display", "block");
-      $("#groups").css("display", "none");     
+      $("#groups").css("display", "none"); 
+      
+      // Ask for sessions list
+      socket.emit("admin_sessions_list_request");
     }
+  });
+
+  /**
+   * When the list of sessions arrive, we build a table 
+   */
+  socket.on("admin_sessions_list_response", function(data) { 
+    // Print details of received data      
+    console.log("=> socket.io::sadmin_essions_list_response : " + JSON.stringify(data));      
+    
+    // Build tables's lines (1 quiz = 1 line)
+    $.each(data.sessions, function(key, value) {
+      let html_table_line = "<tr>";
+      html_table_line += "<td>" + value.session_id + "</td>";
+      html_table_line += "<td>" + value.session_date + "</td>";
+      html_table_line += "<td>" + value.quiz_id_fk + "</td>";
+      html_table_line += "<td>" + value.progression_id_fk + "</td>";
+      html_table_line += "<td><button id=\"" + value.session_id + "\" type=\"button\" ";
+      html_table_line += "class=\"btn btn-danger sessionDeletable\">";
+      html_table_line += "Delete</button></td>";
+      html_table_line += "</tr>";
+      $("#sessionsTable").append(html_table_line);
+    });
+  });
+
+  /**
+   * When clicking to delete a session
+   */
+  $(document).on("click", ".sessionDeletable" ,function (event) {      
+    // Print details of event
+    console.log("=> button::.sessionDeletable : " + this.id);        
+
+    // Send selected quiz_id thru socket.io
+    socket.emit("admin_sessions_delete_request", {"session_id": this.id});
   });
 
 
