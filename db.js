@@ -193,7 +193,7 @@ function get_leaderboard_for_question(session_id, question_id, callback) {
             SUM(
                 CASE
                     WHEN Participation.answer_id_fk = Answer.answer_id AND Answer.answer_is_correct = 1
-                    THEN ((1000*(Question.question_time - Participation.participation_time_to_answer))/Question.question_time)
+                    THEN 500+((500*(Question.question_time - Participation.participation_time_to_answer))/Question.question_time)
                     ELSE 0
                 END
             ) AS player_score
@@ -216,7 +216,7 @@ function get_leaderboard_for_session(session_id, callback) {
             SUM(
                 CASE
                     WHEN Participation.answer_id_fk = Answer.answer_id AND Answer.answer_is_correct = 1
-                    THEN ((1000*(Question.question_time - Participation.participation_time_to_answer))/Question.question_time)
+                    THEN 500+((500*(Question.question_time - Participation.participation_time_to_answer))/Question.question_time)
                     ELSE 0
                 END
             ) AS player_score
@@ -238,7 +238,7 @@ function get_leaderboard_for_progression(progression_id, callback) {
             SUM(
               CASE
                 WHEN Participation.answer_id_fk = Answer.answer_id AND Answer.answer_is_correct = 1
-                THEN ((1000*(Question.question_time - Participation.participation_time_to_answer))/Question.question_time)
+                THEN 500+((500*(Question.question_time - Participation.participation_time_to_answer))/Question.question_time)
                 ELSE 0
               END
             ) AS player_score

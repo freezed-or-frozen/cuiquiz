@@ -48,7 +48,7 @@ Concerning the **player** :
 - [X] question ends twice (time's up and end button)
 - [X] question text font in black color
 - [ ] print question number
-- [ ] add more points if answer is good (but slow)
+- [X] add more points if answer is good (but slow)
 - [X] bigger response buttons for players
 - [ ] < and > characters don't print : &lt; ?
 
