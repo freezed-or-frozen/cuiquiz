@@ -49,7 +49,7 @@ Concerning the **player** :
 - [X] question text font in black color
 - [ ] print question number
 - [ ] add more points if answer is good (but slow)
-- [ ] bigger response buttons for players
+- [X] bigger response buttons for players
 - [ ] < and > characters don't print : &lt; ?
 
 ### Security
