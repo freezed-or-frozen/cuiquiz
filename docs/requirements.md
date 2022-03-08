@@ -46,7 +46,11 @@ Concerning the **player** :
 ### Quiz
 - [X] add symbols on the teacher's pages question
 - [X] question ends twice (time's up and end button)
-- [ ] question text font in black color
+- [X] question text font in black color
+- [ ] print question number
+- [ ] add more points if answer is good (but slow)
+- [ ] bigger response buttons for players
+- [ ] < and > characters don't print : &lt; ?
 
 ### Security
 - [X] everybody can access teacher's page
