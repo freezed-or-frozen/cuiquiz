@@ -303,10 +303,10 @@ $(document).ready(function(){
   
   /**
    * Go back to results
-   */  
+   */
   $("#goBackToResult").click(function(){
     // Print button details
-    console.log("=> button::#goBackToResult) : ");  
+    console.log("=> button::#goBackToResult : ");  
  
     // Choose the screen to print in the browser
     $("#choosing").css("display", "none");
@@ -448,11 +448,11 @@ $(document).ready(function(){
   });
 
   /**
-   * Tell the server that we need the next question
+   * Go back to the question to comment answer
    */  
   $("#goBackToQuestion").click(function(){
     // Print button details
-    console.log("=> button::#goBackToQuestion) : ");  
+    console.log("=> button::#goBackToQuestion : ");  
  
     // Choose the screen to print in the browser
     $("#choosing").css("display", "none");

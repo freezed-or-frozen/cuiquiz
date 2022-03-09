@@ -41,7 +41,7 @@ http {
 ## 3 - Start container
 Start container image with :
 ```
-docker run --rm --name cuiquiz-container -p 1234:3000 cuiquiz-image
+docker run --rm --name cuiquiz-container -p 1234:3000 -d cuiquiz-image
 ```
 
 If everything goes fine, restart the container in detached mode (-d)
