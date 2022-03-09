@@ -70,7 +70,7 @@ app.get("/", (request, response) => {
 });
 
 app.get("/student", (request, response) => {
-  response.sendFile(__dirname + HTML_PATH + "/test_teacher.html");
+  response.sendFile(__dirname + HTML_PATH + "/student.html");
 });
 
 app.get("/login", (request, response) => {
