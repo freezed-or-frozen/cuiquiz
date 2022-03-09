@@ -301,7 +301,23 @@ $(document).ready(function(){
     }, 1000);
   });
   
-  
+  /**
+   * Go back to results
+   */  
+  $("#goBackToResult").click(function(){
+    // Print button details
+    console.log("=> button::#goBackToResult) : ");  
+ 
+    // Choose the screen to print in the browser
+    $("#choosing").css("display", "none");
+    $("#naming").css("display", "none");
+    $("#gaming").css("display", "none");
+    $("#checking").css("display", "block");
+    $("#sorting").css("display", "none");
+    $("#thanking").css("display", "none");
+    $("#ending").css("display", "none");
+  });
+
   /**
    * When a player answered a question
    */
@@ -431,6 +447,23 @@ $(document).ready(function(){
     socket.emit("question_details_request");    
   });
 
+  /**
+   * Tell the server that we need the next question
+   */  
+  $("#goBackToQuestion").click(function(){
+    // Print button details
+    console.log("=> button::#goBackToQuestion) : ");  
+ 
+    // Choose the screen to print in the browser
+    $("#choosing").css("display", "none");
+    $("#naming").css("display", "none");
+    $("#gaming").css("display", "block");
+    $("#checking").css("display", "none");
+    $("#sorting").css("display", "none");
+    $("#thanking").css("display", "none");
+    $("#ending").css("display", "none");
+  });
+  
   /**
    * When question leaderboard results are received
    */
