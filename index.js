@@ -65,19 +65,19 @@ function generate_session_id()  {
 //
 // Routes
 //
-app.get("/", (request, response) => {
+app.get(process.env.URL_BASE + "", (request, response) => {
   response.sendFile(__dirname + HTML_PATH + "/index.html");
 });
 
-app.get("/student", (request, response) => {
+app.get(process.env.URL_BASE + "/student", (request, response) => {
   response.sendFile(__dirname + HTML_PATH + "/student.html");
 });
 
-app.get("/login", (request, response) => {
+app.get(process.env.URL_BASE + "/login", (request, response) => {
   response.sendFile(__dirname + HTML_PATH + "/login.html");
 });
 
-app.post("/auth", function(request, response) {
+app.post(process.env.URL_BASE + "/auth", function(request, response) {
 	// Retrieve the password
   let password = request.body.password;
   console.log(" => teacher's password : " + password);
