@@ -8,6 +8,7 @@
 const fs = require("fs");
 const md = require('markdown-it')();
 const YAML = require('yaml');
+const he = require('he');
 
 // To use custom db driver
 const db = require("./db");
@@ -111,7 +112,7 @@ function md2json(markdown_quiz) {
           "<img src=\"$1\" class=\"img-custom\" alt=\"...\">"
         );
         //question_text.replace("https", "img");
-        question["question_text"] = question_text;
+        question["question_text"] = he.encode(question_text);
 
         // Transform image
         
@@ -138,7 +139,7 @@ function md2json(markdown_quiz) {
         }
 
         let answer = {};
-        answer["answer_text"] = token.content;
+        answer["answer_text"] = he.encode(token.content);
         answer["answer_is_correct"] = answer_is_correct;
         answer["answer_position"] = answer_position;
         answer["question_id_fk"] = question_id;

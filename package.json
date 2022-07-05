@@ -8,11 +8,12 @@
         "start": "node index.js"
     },
     "dependencies": {
+        "dotenv": "16.0.0",
         "express": "^4.17.2",
+        "he": "^1.2.0",
         "markdown-it": "12.3.2",
         "socket.io": "^4.4.1",
         "sqlite3": "^5.0.2",
-        "yaml": "^1.10.2",
-        "dotenv": "16.0.0"
+        "yaml": "^1.10.2"
     }
 }
