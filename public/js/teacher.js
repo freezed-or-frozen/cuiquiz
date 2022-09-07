@@ -7,22 +7,79 @@
 // Global variables
 var CurrentSession = {};
 
+/*
+// Highlight quiz written with markdown/YAML syntax 
+  //   text/x-markdown
+  //   text/x-yaml
+  //   yaml-frontmatter
+  let quizTextArea = document.getElementById("quizEditor");
+  console.log(quizTextArea.value);
+  let quizEditor = CodeMirror.fromTextArea(quizTextArea, {
+    lineNumbers: true,
+    mode: "yaml-frontmatter"
+  });
+*/
+
+/*
+let quizTextArea = document.getElementById("quizEditor");
+  //let quizTextArea = $("#quizEditor").get(0);
+  let quizEditor = CodeMirror.fromTextArea(quizTextArea, {
+    lineNumbers: true,
+    mode: "yaml-frontmatter"
+  });
+*/
+
+
+
 // Let's start...
-$(document).ready(function(){
+$(document).ready(function(){ 
 
   // Page is loaded and ready
   console.log("=> page is ready...");  
 
+            
+  var editor = ace.edit("quizEditor");
+  //editor.set('loadWorkerFromBlob', false);
+  editor.session.setOption("useWorker", false);
+  editor.setTheme("ace/theme/monokai");
+  //editor.session.setMode("ace/mode/yaml");
+  editor.session.setMode("ace/mode/markdown");
+  editor.resize();
+  //editor.setValue("the new text here");
+  console.log(editor.getValue());
+
+  //$("#quizEditor").html("coucou");
+  //console.log($("#quizEditor").val());
+  //let quizTextArea = document.getElementById("quizEditor");
+  //let quizTextArea = $("#quizEditor").get(0);
+  /*
+  let quizTextArea = $("#quizEditor")[0];
+  let quizEditor = CodeMirror.fromTextArea(quizTextArea, {
+    lineNumbers: true,
+    mode: "yaml-frontmatter"
+  });
+  */
+ /*
+ window.quizEditor = CodeMirror(document.getElementById("quizEditor"), {
+  lineNumbers: true,
+  mode: "yaml-frontmatter"
+});
+*/
+
+  
+  
+
   // Choose the screen to print in the browser
   $("#authenticating").css("display", "block");
-  $("#choosing").css("display", "none");
+  $("#choosing").css("display", "block");
   $("#naming").css("display", "none");
   $("#gaming").css("display", "none");
   $("#checking").css("display", "none");
   $("#sorting").css("display", "none");
   $("#thanking").css("display", "none");
   $("#ending").css("display", "none");
-  
+
+
   // Creation of socket.io object
   var socket = io();
 
@@ -59,6 +116,9 @@ $(document).ready(function(){
    * When a the list of progression arrive, we build a table 
    */
   socket.on("progressions_list_response", function(data) { 
+
+
+
     // Print details of received data      
     console.log("=> socket.io::progressions_list_response : " + JSON.stringify(data));      
     
@@ -287,7 +347,7 @@ $(document).ready(function(){
     $("#questionAnswer2").html(data.answers[2]);
     $("#questionAnswer3").html(data.answers[3]);
 
-    // Hightlight color syntax
+    // Hightlight color syntax in questions
     document.querySelectorAll("pre code").forEach((block) => {      
       hljs.highlightElement(block);
       hljs.lineNumbersBlock(block);

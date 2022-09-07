@@ -27,7 +27,7 @@ function md2json(markdown_quiz) {
 
   // Convert markdown into an array of tokens thanks to markdown-it library
   const tokens = md.parse(markdown_quiz, {references: {}});
-  console.log(tokens);
+  //console.log(tokens);
 
   // Variables
   let quiz = {};
@@ -95,6 +95,9 @@ function md2json(markdown_quiz) {
         quiz["quiz_title"] = quiz_yml.quiz_title;
         quiz["quiz_description"] = quiz_yml.quiz_description;
         quiz["question_time"] = quiz_yml.question_time;
+        quiz["progression"] = quiz_yml.progression;
+        quiz["group"] = quiz_yml.group;
+        quiz["players"] = quiz_yml.players;
         console.log("META => " + JSON.stringify(quiz_yml));
       }
       
@@ -112,7 +115,8 @@ function md2json(markdown_quiz) {
           "<img src=\"$1\" class=\"img-custom\" alt=\"...\">"
         );
         //question_text.replace("https", "img");
-        question["question_text"] = he.encode(question_text);
+        //question["question_text"] = he.encode(question_text);
+        question["question_text"] = question_text;
 
         // Transform image
         
@@ -278,7 +282,7 @@ if (process.argv.length < 3) {
         console.log(json_quiz);
 
         // JSON -> SQL
-        json2sql(json_quiz);        
+        //json2sql(json_quiz);        
       });
     } else {
       console.log("ERROR : problem with quiz_import command");

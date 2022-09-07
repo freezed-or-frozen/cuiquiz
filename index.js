@@ -12,6 +12,7 @@ const http = require("http");
 const server = http.createServer(app);
 
 app.use(express.static("public"));
+//app.use("/public", express.static("public"));
 app.use(express.urlencoded({ extended: true }));  // to parse POST requests
 
 // For socket.io library
@@ -65,19 +66,23 @@ function generate_session_id()  {
 //
 // Routes
 //
-app.get(process.env.URL_BASE + "", (request, response) => {
+app.get("/", (request, response) => {
   response.sendFile(__dirname + HTML_PATH + "/index.html");
 });
 
-app.get(process.env.URL_BASE + "/student", (request, response) => {
+app.get("/student", (request, response) => {
   response.sendFile(__dirname + HTML_PATH + "/student.html");
 });
 
-app.get(process.env.URL_BASE + "/login", (request, response) => {
+app.get("/login", (request, response) => {
   response.sendFile(__dirname + HTML_PATH + "/login.html");
 });
 
-app.post(process.env.URL_BASE + "/auth", function(request, response) {
+app.get("/new", (request, response) => {
+  response.sendFile(__dirname + HTML_PATH + "/teacher.html");
+});
+
+app.post("/auth", function(request, response) {
 	// Retrieve the password
   let password = request.body.password;
   console.log(" => teacher's password : " + password);
@@ -103,17 +108,36 @@ app.post(process.env.URL_BASE + "/auth", function(request, response) {
 	// Ensure the password exists and is not empty
 	if ((password) && (password == process.env.TEACHER_PASSWORD)) {
     CurrentSession["session_token"] = generate_session_id();
-    response.sendFile(__dirname + HTML_PATH + "/teacher.html");
+    console.log(" => session_token : " + CurrentSession["session_token"]);
+    //response.sendFile(__dirname + HTML_PATH + "/teacher.html");
+    response.redirect("/new"); 
   } else {
     CurrentSession["session_token"] = "NOPE";
-    //response.sendFile(__dirname + HTML_PATH + "/login.html");
-    response.redirect("/cuiquiz/login");  // production
-    //response.redirect("/login");  // development
+    response.redirect("/login"); 
   }
 });
 
 /*
-app.get("/administrator", (request, response) => {
+app.get("/administrator/login", (request, response) => {
+  response.sendFile(__dirname + HTML_PATH + "/administrator_login.html");
+});
+
+app.post("/administrator/auth", function(request, response) {
+	// Retrieve the password
+  let password = request.body.password;
+  console.log(" => administrator's password : " + password);
+
+  // Ensure the password exists and is not empty
+	if ((password) && (password == process.env.ADMINISTRATOR_PASSWORD)) {  
+    CurrentSession["session_token"] = generate_session_id();
+    console.log(" => session_token : " + CurrentSession["session_token"]); 
+    response.redirect("/administrator/home"); 
+  } else {    
+    response.redirect("/administrator/login"); 
+  }
+});
+
+app.get("/administrator/home", (request, response) => {
   response.sendFile(__dirname + HTML_PATH + "/administrator.html");
 });
 */
@@ -663,7 +687,7 @@ io.on("connection", (socket) => {
   });
 
   /**
-   * When a teacher needs the quizzes list
+   * When a administrator needs the quizzes list
    */
   socket.on("admin_quizzes_list_request", (data) => {
     // Print request details
@@ -681,6 +705,25 @@ io.on("connection", (socket) => {
       socket.emit("admin_quizzes_list_response", response);
     });   
   });
+
+  /**
+   * When a administrator needs the groups list
+   */
+  socket.on("admin_groups_list_request", (data) => {
+    // Print request details
+    console.log(" => admin_groups_list_request : " + JSON.stringify(data) );
+    
+    // Get quizzes list and return thru socket.io      
+    let response = {};
+    db.get_all_groups( (error, data) => {
+      response["error"] = error;
+      response["groups"] = data;      
+      console.log(response);
+      socket.emit("admin_groups_list_response", response);
+    });   
+  });
+
+  
 
 
   //==========================================================================

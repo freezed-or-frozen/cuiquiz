@@ -17,8 +17,8 @@ node ./index.js
 ```
 
 In a web browser : 
-- (http://127.0.0.1:3000/teacher) for teacher
-- (http://127.0.0.1:3000/student) for student
+- (http://127.0.0.1:3000/cuiquiz/login) for teacher
+- (http://127.0.0.1:3000/cuiquiz/student) for student
 
 
 

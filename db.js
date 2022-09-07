@@ -40,6 +40,8 @@ function get_one_progression(progression_id, callback) {
   });	
 }
 
+
+
 function get_all_quizzes(callback) {
   db.all(`
     SELECT * 
@@ -432,6 +434,15 @@ function delete_all_sessions_for_progression(progression_id, callback) {
   });	
 }
 
+function get_all_groups(callback) {
+  db.all(`
+    SELECT * 
+    FROM 'Group';`,
+    [], (error, rows) => {
+      callback(error, rows);
+  });	
+}
+
 /*
 SELECT	CASE 
 			WHEN 0 = 0
@@ -490,5 +501,7 @@ module.exports = {
   delete_quiz,
   delete_session,
   get_all_sessions,
-  delete_all_sessions_for_progression
+  delete_all_sessions_for_progression,
+
+  get_all_groups
 }

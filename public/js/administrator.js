@@ -42,7 +42,7 @@ $(document).ready(function(){
   //==========================================================================
   
   /**
-   * When teacher click to send its password
+   * When administrator click to send its password
    */
   $("#administratorPasswordButton").click(function(){
     // Print details of clicked button
@@ -117,7 +117,7 @@ $(document).ready(function(){
     console.log("=> socket.io::admin_progressions_list_response : " + JSON.stringify(data));      
     
     // Build tables's lines (1 quiz = 1 line)
-    $("#progressionsTable").html();
+    $("#progressionsTable").html("");
     $.each(data.progressions, function(key, value) {
       let html_table_line = "<tr>";
       html_table_line += "<td>" + value.progression_id + "</td>";
@@ -179,6 +179,7 @@ $(document).ready(function(){
     console.log("=> socket.io::quizzes_list_response : " + JSON.stringify(data));      
     
     // Build tables's lines (1 quiz = 1 line)
+    $("#quizzesTable").html("");
     $.each(data.quizzes, function(key, value) {
       let html_table_line = "<tr>";
       html_table_line += "<td>" + value.quiz_id + "</td>";
@@ -265,9 +266,10 @@ $(document).ready(function(){
    */
   socket.on("admin_sessions_list_response", function(data) { 
     // Print details of received data      
-    console.log("=> socket.io::sadmin_essions_list_response : " + JSON.stringify(data));      
+    console.log("=> socket.io::admin_sessions_list_response : " + JSON.stringify(data));      
     
     // Build tables's lines (1 quiz = 1 line)
+    $("#sessionsTable").html("");
     $.each(data.sessions, function(key, value) {
       let html_table_line = "<tr>";
       html_table_line += "<td>" + value.session_id + "</td>";
@@ -314,8 +316,32 @@ $(document).ready(function(){
       $("#quizzes").css("display", "none");
       $("#markdown").css("display", "none");
       $("#sessions").css("display", "none");
-      $("#groups").css("display", "block");     
+      $("#groups").css("display", "block");   
+      
+      // Ask for groups list
+      socket.emit("admin_groups_list_request");
     }
+  });
+
+  /**
+   * When the list of groups arrive, we build a table 
+   */
+  socket.on("admin_groups_list_response", function(data) { 
+    // Print details of received data      
+    console.log("=> socket.io::admin_groups_list_response : " + JSON.stringify(data));      
+    
+    // Build tables's lines (1 quiz = 1 line)
+    $("#groupsTable").html("");
+    $.each(data.groups, function(key, value) {
+      let html_table_line = "<tr>";
+      html_table_line += "<td>" + value.group_id + "</td>";
+      html_table_line += "<td>" + value.group_name + "</td>";      
+      html_table_line += "<td><button id=\"" + value.group_id + "\" type=\"button\" ";
+      html_table_line += "class=\"btn btn-danger sessionDeletable\">";
+      html_table_line += "Delete</button></td>";
+      html_table_line += "</tr>";
+      $("#groupsTable").append(html_table_line);
+    });
   });
 
 });
