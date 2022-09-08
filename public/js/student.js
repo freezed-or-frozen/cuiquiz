@@ -32,7 +32,7 @@ $(document).ready(function(){
   
   // Create the socket.io
   var socket = io({
-    path: "/myownpath/"
+    path: "/cuiquiz/"
   });
 
   // Handle connection status icon
