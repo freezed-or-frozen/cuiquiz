@@ -26,7 +26,9 @@ $(document).ready(function(){
 
 
   // Creation of socket.io object
-  var socket = io();
+  var socket = io({
+    path: "/cuiquiz/"
+  });
 
   socket.on("connect", function(msg){
     console.log("=> socket.io::connect"); 
