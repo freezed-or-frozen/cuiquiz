@@ -31,7 +31,9 @@ $(document).ready(function(){
   $("#ending").css("display", "none");
   
   // Create the socket.io
-  var socket = io();
+  var socket = io({
+    path: "/myownpath/"
+  });
 
   // Handle connection status icon
   socket.on("connect", function(msg){
