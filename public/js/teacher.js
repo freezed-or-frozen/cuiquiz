@@ -7,71 +7,16 @@
 // Global variables
 var CurrentSession = {};
 
-/*
-// Highlight quiz written with markdown/YAML syntax 
-  //   text/x-markdown
-  //   text/x-yaml
-  //   yaml-frontmatter
-  let quizTextArea = document.getElementById("quizEditor");
-  console.log(quizTextArea.value);
-  let quizEditor = CodeMirror.fromTextArea(quizTextArea, {
-    lineNumbers: true,
-    mode: "yaml-frontmatter"
-  });
-*/
-
-/*
-let quizTextArea = document.getElementById("quizEditor");
-  //let quizTextArea = $("#quizEditor").get(0);
-  let quizEditor = CodeMirror.fromTextArea(quizTextArea, {
-    lineNumbers: true,
-    mode: "yaml-frontmatter"
-  });
-*/
-
-
 
 // Let's start...
 $(document).ready(function(){ 
 
   // Page is loaded and ready
-  console.log("=> page is ready...");  
-
-            
-  var editor = ace.edit("quizEditor");
-  //editor.set('loadWorkerFromBlob', false);
-  editor.session.setOption("useWorker", false);
-  editor.setTheme("ace/theme/monokai");
-  //editor.session.setMode("ace/mode/yaml");
-  editor.session.setMode("ace/mode/markdown");
-  editor.resize();
-  //editor.setValue("the new text here");
-  console.log(editor.getValue());
-
-  //$("#quizEditor").html("coucou");
-  //console.log($("#quizEditor").val());
-  //let quizTextArea = document.getElementById("quizEditor");
-  //let quizTextArea = $("#quizEditor").get(0);
-  /*
-  let quizTextArea = $("#quizEditor")[0];
-  let quizEditor = CodeMirror.fromTextArea(quizTextArea, {
-    lineNumbers: true,
-    mode: "yaml-frontmatter"
-  });
-  */
- /*
- window.quizEditor = CodeMirror(document.getElementById("quizEditor"), {
-  lineNumbers: true,
-  mode: "yaml-frontmatter"
-});
-*/
-
-  
-  
+  console.log("=> page is ready..."); 
 
   // Choose the screen to print in the browser
   $("#authenticating").css("display", "block");
-  $("#choosing").css("display", "block");
+  $("#choosing").css("display", "none");
   $("#naming").css("display", "none");
   $("#gaming").css("display", "none");
   $("#checking").css("display", "none");

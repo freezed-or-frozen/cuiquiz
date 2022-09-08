@@ -45,8 +45,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.7.1/mode-markdown.min.js" integrity="sha512-VAjIEMQm6jf8KuP/SExcgB+2Z5HMdXGaQ1cwyL9/DVG28qBqrhNuDpXFDHn7Fa1GuNUYG78I13YHstv1B8h8wA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.7.1/theme-monokai.min.js" integrity="sha512-wZYGbdk0giM73l8BLDNfSEziApAmH8DvXey6zNLG3QUgDeDsMAPm3FIdjhLwrGOWO0vdVHkVxeUzOBR0Hc/xBA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-
-
     <!-- Custom Javascript code -->
     <script src="/js/teacher.js" type="text/javascript" charset="utf-8"></script>
 
@@ -104,28 +102,38 @@
 
       <!-- Screen #0 : choosing the quiz to play -->
       <div id="choosing">
-        <h2>Quiz creation</h2>
-        <div id="quiz">
-          <div id="quizEditor" cols="80" rows="20">
----
-quiz_title: C++, variables types et opérateurs
-quiz_description: Un quiz pour réviser les notions autour des variables, types et opérateurs
-question_time: 60
----
+        <h2>Progression list</h2>
+        <div id="quizzes">
+          <table class="table">
+            <thead class="thead-dark">
+              <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Group</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="progressionsTable">
+            </tbody>          
+          </table>
+        </div>
 
-Choisir la mauvaise assertion parmi les propositions suivantes
-!(https://full-shirts.s3.us-east-2.amazonaws.com/A1Bz%2BSpGWVL._CLa_61jSrGJx%2BAL_Y.png)
-- Le C++ est un langage compilé
-- Le C++ est une évolution du langage C
-- Le C++ utilise la programmation objet
-* Le C++ est un langage interprété          
-          </div>
+        <h2>Quizzes list</h2>
+        <div id="quizzes">
+          <table class="table">
+            <thead class="thead-dark">
+              <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="quizzesTable">
+            </tbody>          
+          </table>
         </div>
       </div>
-      <script>
-
-      </script>
-
 
       <!-- Screen #1 : naming the player -->
       <div id="naming">

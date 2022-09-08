@@ -78,7 +78,7 @@ app.get("/login", (request, response) => {
   response.sendFile(__dirname + HTML_PATH + "/login.html");
 });
 
-app.get("/new", (request, response) => {
+app.get("/teacher", (request, response) => {
   response.sendFile(__dirname + HTML_PATH + "/teacher.html");
 });
 
@@ -110,7 +110,7 @@ app.post("/auth", function(request, response) {
     CurrentSession["session_token"] = generate_session_id();
     console.log(" => session_token : " + CurrentSession["session_token"]);
     //response.sendFile(__dirname + HTML_PATH + "/teacher.html");
-    response.redirect("/new"); 
+    response.redirect("/teacher"); 
   } else {
     CurrentSession["session_token"] = "NOPE";
     response.redirect("/login"); 
