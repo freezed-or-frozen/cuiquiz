@@ -25,9 +25,9 @@ $(document).ready(function(){
   $("#ending").css("display", "none");
 
 
-  // Creation of socket.io object
+  // Create the socket.io
   var socket = io({
-    path: "/cuiquiz/"
+    path: "/cuiquiz/socket.io/"
   });
 
   socket.on("connect", function(msg){

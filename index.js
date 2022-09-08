@@ -21,10 +21,10 @@ const io = new Server(server);
 io.path("/cuiquiz/");
 
 // For credentials
-const dotenv = require('dotenv').config();
+const dotenv = require("dotenv").config();
 
 // For session id
-var crypto = require('crypto');
+var crypto = require("crypto");
 
 // For custom db driver and import
 const db = require("./db");
