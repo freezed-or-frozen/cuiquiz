@@ -18,6 +18,7 @@ app.use(express.urlencoded({ extended: true }));  // to parse POST requests
 // For socket.io library
 const { Server } = require("socket.io");
 const io = new Server(server);
+io.path("/cuiquiz/");
 
 // For credentials
 const dotenv = require('dotenv').config();
